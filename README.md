@@ -5,6 +5,10 @@
 ![Typed: mypy strict](https://img.shields.io/badge/typed-mypy%20strict-1d4ed8.svg)
 ![Lint: ruff](https://img.shields.io/badge/lint-ruff-7c3aed.svg)
 
+### [📖 &nbsp;Read the interactive explainer &nbsp;→](https://andyclapsonprojects-hub.github.io/TheSlowBrain/)
+
+*(Beginner / Intermediate / Expert views — opens the rendered page. GitHub shows `.html` files as source, so use this link rather than opening the file in the repo.)*
+
 **A cautious stock-trading research "brain" that studies the market and only ever _suggests_ — it never trades your money by default.**
 
 TheSlowBrain turns raw market evidence into honest BUY / SELL / HOLD / WATCHLIST / AVOID
