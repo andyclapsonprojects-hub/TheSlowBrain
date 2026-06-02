@@ -82,10 +82,9 @@ and use `scripts/run_first_slowbrain_cycle.py`.
 
 ## Documentation
 
-- 📘 **[docs/index.html](docs/index.html)** — a single, self-contained visual explainer with
-  **Beginner / Intermediate / Expert** views of what the project is and how to use it.
-  GitHub shows HTML as source in the repo view, so **open it locally in a browser** (or enable
-  GitHub Pages on the `docs/` folder to view it rendered).
+- 📘 **[Live visual explainer →](https://andyclapsonprojects-hub.github.io/TheSlowBrain/)** — a
+  single, self-contained page with **Beginner / Intermediate / Expert** views of what the project
+  is and how to use it. (Source: [docs/index.html](docs/index.html) — also opens locally in any browser.)
 - 📗 **[docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md)** — the architecture, the pipeline, the
   evaluation layers, the safety model, and how to extend the system, in prose.
 
