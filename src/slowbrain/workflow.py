@@ -1,0 +1,165 @@
+"""End-to-end first TheSlowBrain cycle."""
+
+from __future__ import annotations
+
+from pathlib import Path
+from typing import cast
+
+from .backtest import evaluate_rubric
+from .config import load_config
+from .data_import import MANIFEST_NAME, default_import_root, load_manifest
+from .decision_capture import (
+    DECISION_CAPTURE_JSONL,
+    DECISION_OUTCOME_STREAM_JSONL,
+    append_decision_outcome_stream,
+    write_decision_capture,
+)
+from .eval_council import HumanLabel, OpenAIJudgeClient, calibrate_against_humans, load_human_examples
+from .features import (
+    SUPPORTED_FORWARD_HORIZONS,
+    load_features_for_idea_ids_from_legacy_sqlite,
+    load_features_from_legacy_sqlite,
+    load_training_features_from_legacy_sqlite,
+)
+from .gating_model import evaluate_gating_model
+from .grader_council import propose_rubric_candidates
+from .human_anchor import HUMAN_ANCHOR_JSON
+from .learning_state import (
+    ACTIVE_RUBRIC_STATE_JSON,
+    GATING_GATE_STATE_JSON,
+    TRACK_RECORD_JSONL,
+    append_track_record,
+    load_active_rubric,
+    load_outcome_stream_features,
+    merge_feature_evidence,
+    persist_active_rubric,
+    persist_gating_gate,
+    workflow_run_id,
+)
+from .market_data import warm_market_data_provider
+from .market_data_vendors import build_market_data_provider
+from .optimizer import select_rubric
+from .reporting import build_eric_brief, write_first_report
+from .rubrics import BASE_RUBRIC, decide_feature
+from .trading_flow import build_blocked_order_intents, build_ranked_trade_decision_pairs, load_portfolio_state
+
+FIRST_REPORT_JSON = Path("reports/first-slowbrain-report.json")
+FIRST_REPORT_MD = Path("reports/first-slowbrain-report.md")
+
+
+def run_first_cycle(project_root: Path, *, feature_limit: int | None = 5000) -> dict[str, object]:
+    run_id = workflow_run_id()
+    config = load_config(project_root)
+    import_root = default_import_root(project_root)
+    manifest = load_manifest(import_root / MANIFEST_NAME)
+    sqlite_path = import_root / "paper_trading" / "pipeline_runs.sqlite"
+    anchor_path = project_root / HUMAN_ANCHOR_JSON
+    active_rubric_state_target = project_root / ACTIVE_RUBRIC_STATE_JSON
+    gating_gate_state_target = project_root / GATING_GATE_STATE_JSON
+    track_record_target = project_root / TRACK_RECORD_JSONL
+    active_rubric = load_active_rubric(active_rubric_state_target, default=BASE_RUBRIC)
+    anchor_examples = load_human_examples(anchor_path)
+    anchor_ids = tuple(example.example_id for example in anchor_examples)
+    features = load_features_from_legacy_sqlite(
+        sqlite_path,
+        horizon_days=10,
+        limit=feature_limit,
+        exclude_idea_ids=anchor_ids,
+    )
+    gating_features = load_training_features_from_legacy_sqlite(
+        sqlite_path,
+        horizon_days=SUPPORTED_FORWARD_HORIZONS,
+        limit=feature_limit,
+        exclude_idea_ids=anchor_ids,
+    )
+    market_data_provider = build_market_data_provider(config, project_root=project_root)
+    warm_market_data_provider(market_data_provider, features)
+    candidates = propose_rubric_candidates(active_rubric, features)
+    openai_judge = (
+        OpenAIJudgeClient(api_key=config.openai_api_key, model=config.openai_model)
+        if config.openai_api_key
+        else None
+    )
+    promotion = select_rubric(
+        active=active_rubric,
+        candidates=candidates,
+        features=features,
+        openai_judge=openai_judge,
+        council_cache_dir=project_root / "data" / "eval_council_cache",
+        market_data_provider=market_data_provider,
+    )
+    selected_rubric = next(
+        (candidate.rubric for candidate in candidates if candidate.rubric.version == promotion.selected_version),
+        active_rubric,
+    )
+    active_rubric_state_path = persist_active_rubric(
+        active_rubric_state_target,
+        selected_rubric,
+        run_id=run_id,
+        promotion_action=promotion.action,
+        reason=promotion.reason,
+    )
+    decision_pairs = build_ranked_trade_decision_pairs(features[-200:], selected_rubric, limit=10)
+    label_capture_pairs = build_ranked_trade_decision_pairs(features[-1000:], selected_rubric, limit=200)
+    decisions = tuple(decision for _, decision in decision_pairs)
+    decision_capture_path = write_decision_capture(
+        project_root / DECISION_CAPTURE_JSONL,
+        label_capture_pairs,
+        run_id=run_id,
+    )
+    decision_outcome_stream_path = append_decision_outcome_stream(
+        project_root / DECISION_OUTCOME_STREAM_JSONL,
+        label_capture_pairs,
+        run_id=run_id,
+    )
+    outcome_stream = load_outcome_stream_features(decision_outcome_stream_path, exclude_idea_ids=anchor_ids)
+    gating_evidence = merge_feature_evidence(gating_features, outcome_stream.features)
+    anchor_features = load_features_for_idea_ids_from_legacy_sqlite(
+        sqlite_path,
+        idea_ids=anchor_ids,
+        horizon_days=10,
+    )
+    automated_anchor_labels = {
+        feature.idea_id: cast(HumanLabel, decide_feature(feature, selected_rubric).action)
+        for feature in anchor_features
+    }
+    human_calibration = calibrate_against_humans(anchor_examples, automated_anchor_labels)
+    gating_model = evaluate_gating_model(
+        gating_evidence,
+        selected_rubric,
+        human_examples=anchor_examples,
+        anchor_features=anchor_features,
+    )
+    gating_gate_state_path = persist_gating_gate(gating_gate_state_target, gating_model, run_id=run_id)
+    portfolio_backtest = evaluate_rubric(features, selected_rubric, market_data_provider=market_data_provider)
+    portfolio = load_portfolio_state(import_root)
+    intents = build_blocked_order_intents(decisions, portfolio)
+    brief = build_eric_brief(decisions, portfolio)
+    payload = write_first_report(
+        output_json=project_root / FIRST_REPORT_JSON,
+        output_md=project_root / FIRST_REPORT_MD,
+        promotion=promotion,
+        decisions=decisions,
+        blocked_order_intents=intents,
+        import_record_count=len(manifest.records),
+        portfolio=portfolio,
+        portfolio_backtest=portfolio_backtest,
+        decision_capture_path=decision_capture_path,
+        decision_outcome_stream_path=decision_outcome_stream_path,
+        active_rubric_state_path=active_rubric_state_path,
+        gating_gate_state_path=gating_gate_state_path,
+        track_record_path=track_record_target,
+        outcome_stream_training=outcome_stream.as_dict(),
+        human_calibration=human_calibration,
+        gating_model=gating_model,
+        brief=brief,
+    )
+    append_track_record(
+        track_record_target,
+        run_id=run_id,
+        report_payload=payload,
+        outcome_stream=outcome_stream,
+        active_rubric_state_path=active_rubric_state_path,
+        gating_gate_state_path=gating_gate_state_path,
+    )
+    return payload

@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TheSlowBrain — what it is &amp; how to use it</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #11161f;
+      --muted: #4b5667;
+      --line: #e6e9f2;
+      --bg: #f5f6fb;
+      --panel: #ffffff;
+      --indigo: #4f46e5;
+      --violet: #7c3aed;
+      --teal: #0d9488;
+      --emerald: #059669;
+      --amber: #d97706;
+      --rose: #e11d48;
+      --sky: #0284c7;
+      --shadow: 0 18px 40px rgba(33, 22, 90, 0.10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 22px; }
+
+    header {
+      background: linear-gradient(125deg, #4f46e5 0%, #7c3aed 42%, #0d9488 100%);
+      color: #fff;
+      padding: 54px 0 40px;
+    }
+    .eyebrow {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    header h1 { margin: 16px 0 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.08; max-width: 18ch; }
+    header p.tag { margin: 16px 0 0; font-size: clamp(1.02rem, 2.2vw, 1.3rem); color: #eef2ff; max-width: 60ch; }
+    .reassure {
+      margin-top: 22px;
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      background: rgba(5, 150, 105, 0.22);
+      border: 1px solid rgba(220,255,235,0.5);
+      color: #ecfdf5;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    .reassure b { color: #fff; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-top: 26px; }
+    .stat { background: rgba(255,255,255,0.13); border: 1px solid rgba(255,255,255,0.30); border-radius: 14px; padding: 14px 16px; }
+    .stat b { display: block; font-size: clamp(1.5rem, 3.4vw, 2.1rem); line-height: 1.05; color: #fff; }
+    .stat span { display: block; margin-top: 5px; color: #eef0ff; font-size: .85rem; font-weight: 600; }
+
+    /* Tabs */
+    .tabs {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .tabs .wrap { display: flex; gap: 10px; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; }
+    .tab {
+      flex: 1 1 180px;
+      cursor: pointer;
+      border: 2px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font: inherit;
+      text-align: left;
+      transition: transform .08s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    .tab:hover { transform: translateY(-1px); }
+    .tab .lvl { display: block; font-size: 0.74rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+    .tab .name { display: block; font-size: 1.12rem; font-weight: 800; margin-top: 2px; }
+    .tab[aria-selected="true"] { border-color: var(--indigo); box-shadow: var(--shadow); }
+    .tab[data-tab="beginner"][aria-selected="true"] { border-color: var(--emerald); }
+    .tab[data-tab="beginner"][aria-selected="true"] .name { color: var(--emerald); }
+    .tab[data-tab="intermediate"][aria-selected="true"] { border-color: var(--sky); }
+    .tab[data-tab="intermediate"][aria-selected="true"] .name { color: var(--sky); }
+    .tab[data-tab="expert"][aria-selected="true"] { border-color: var(--violet); }
+    .tab[data-tab="expert"][aria-selected="true"] .name { color: var(--violet); }
+
+    main { padding: 30px 0 64px; }
+    .panel { display: none; }
+    .panel.active { display: block; animation: fade .25s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    h2 { font-size: clamp(1.45rem, 3vw, 2rem); margin: 6px 0 4px; }
+    .section { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 24px; margin: 0 0 20px; }
+    .lead { color: var(--muted); font-size: 1.06rem; margin: 0 0 6px; }
+    h3 { margin: 0 0 6px; font-size: 1.04rem; }
+
+    .grid { display: grid; gap: 14px; margin-top: 16px; }
+    .g2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .g3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .g4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .card { border: 1px solid var(--line); border-radius: 14px; padding: 16px; background: #fff; border-left: 6px solid var(--indigo); }
+    .card p { margin: 4px 0 0; color: var(--muted); }
+    .card.em { border-left-color: var(--emerald); }
+    .card.sky { border-left-color: var(--sky); }
+    .card.violet { border-left-color: var(--violet); }
+    .card.amber { border-left-color: var(--amber); }
+    .card.teal { border-left-color: var(--teal); }
+    .card.rose { border-left-color: var(--rose); }
+
+    /* label chips */
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .chip { display: inline-flex; flex-direction: column; gap: 2px; padding: 10px 14px; border-radius: 12px; font-weight: 800; color: #fff; min-width: 130px; }
+    .chip small { font-weight: 600; opacity: .92; font-size: .78rem; }
+    .chip.buy { background: var(--emerald); }
+    .chip.sell { background: var(--rose); }
+    .chip.hold { background: #64748b; }
+    .chip.watch { background: var(--amber); }
+    .chip.avoid { background: #b91c1c; }
+
+    /* steps */
+    .steps { counter-reset: s; display: grid; gap: 12px; margin-top: 16px; }
+    .step { display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: start; border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; background: #fff; }
+    .step::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--indigo), var(--violet)); color: #fff; font-weight: 800; }
+    .step h3 { margin: 2px 0 2px; }
+    .step p { margin: 0; color: var(--muted); }
+
+    pre { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-size: .9rem; margin: 14px 0 0; }
+    code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    p code, li code, td code { background: #eef2ff; color: #3730a3; padding: 1px 6px; border-radius: 6px; font-size: .86em; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: .95rem; }
+    th, td { border: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: #eef2ff; font-weight: 800; }
+
+    .callout { margin-top: 16px; border-radius: 14px; padding: 14px 16px; border: 1px solid; }
+    .callout.ok { background: #ecfdf5; border-color: #a7f3d0; }
+    .callout.warn { background: #fffbeb; border-color: #fde68a; }
+    .callout.block { background: #fef2f2; border-color: #fecaca; }
+    .callout p { margin: 0; }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .pill { padding: 5px 11px; border-radius: 999px; font-size: .82rem; font-weight: 700; border: 1px solid var(--line); background: #fff; color: var(--muted); }
+    .pill.good { background: #ecfdf5; color: var(--emerald); border-color: #a7f3d0; }
+
+    footer { text-align: center; color: var(--muted); padding: 26px 0 40px; }
+    footer a { color: var(--indigo); }
+
+    @media (max-width: 820px) { .g2, .g3, .g4 { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, minmax(0,1fr)); } .section { padding: 18px; } table { display: block; overflow-x: auto; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <span class="eyebrow">A cautious trading research brain</span>
+      <h1>It studies the market and only ever suggests.</h1>
+      <p class="tag">TheSlowBrain turns raw market evidence into honest BUY / SELL / HOLD / WATCHLIST / AVOID
+        decisions — and refuses to dress up weak evidence as proof.</p>
+      <div class="reassure">🔒 <span><b>It never places real trades by default.</b> Live execution is locked behind multiple manual gates.</span></div>
+      <div class="stats" aria-label="Scale of the universe it was developed and back-tested against">
+        <div class="stat"><b>~297K</b><span>research ideas studied</span></div>
+        <div class="stat"><b>~1.18M</b><span>forward-return outcomes</span></div>
+        <div class="stat"><b>3,809</b><span>tickers covered</span></div>
+        <div class="stat"><b>2019–2026</b><span>history · 1/5/10/20-day horizons</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Reader level">
+    <div class="wrap">
+      <button class="tab" data-tab="beginner" role="tab" aria-selected="true" aria-controls="beginner">
+        <span class="lvl">Level 1</span><span class="name">Beginner</span>
+      </button>
+      <button class="tab" data-tab="intermediate" role="tab" aria-selected="false" aria-controls="intermediate">
+        <span class="lvl">Level 2</span><span class="name">Intermediate</span>
+      </button>
+      <button class="tab" data-tab="expert" role="tab" aria-selected="false" aria-controls="expert">
+        <span class="lvl">Level 3</span><span class="name">Expert</span>
+      </button>
+    </div>
+  </div>
+
+  <main>
+    <div class="wrap">
+
+      <!-- ================= BEGINNER ================= -->
+      <section class="panel active" id="beginner" role="tabpanel">
+        <div class="section">
+          <h2>What is it?</h2>
+          <p class="lead">TheSlowBrain is a careful research assistant for the stock market. It reads
+            evidence about companies, scores how promising each one looks, double-checks itself against
+            history, and then gives you a clear suggestion. It is deliberately <b>slow and cautious</b> —
+            its main job is to <i>avoid fooling itself</i>. It does not move your money.</p>
+          <p class="lead" style="margin-top:10px">To build it, the brain studied roughly <b>300,000 ideas</b>
+            across about <b>3,800 companies</b> over <b>seven years</b> of market history (2019–2026). The quick
+            demo on the next tab runs on a small <i>synthetic</i> stand-in, so you can try the whole machine
+            without needing that data.</p>
+          <div class="grid g3">
+            <div class="card em"><h3>It suggests</h3><p>You get a short, plain list of what to buy, sell, hold, watch, or avoid.</p></div>
+            <div class="card sky"><h3>It checks itself</h3><p>Every idea is tested against past data before it is trusted.</p></div>
+            <div class="card violet"><h3>It stays honest</h3><p>If the evidence is weak or missing, it says so instead of guessing confidently.</p></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>The five answers it gives</h2>
+          <p class="lead">Every stock it looks at gets exactly one of these labels:</p>
+          <div class="chips">
+            <span class="chip buy">BUY<small>strong &amp; passes every check</small></span>
+            <span class="chip sell">SELL<small>time to exit a holding</small></span>
+            <span class="chip hold">HOLD<small>do nothing for now</small></span>
+            <span class="chip watch">WATCHLIST<small>almost — keep watching</small></span>
+            <span class="chip avoid">AVOID<small>looks good, but a red flag blocks it</small></span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Use it in three steps</h2>
+          <div class="steps">
+            <div class="step"><div><h3>Install it</h3><p>Install <a href="https://docs.astral.sh/uv/">uv</a>, then let it set up everything from the locked versions.</p></div></div>
+            <div class="step"><div><h3>(Optional) add keys</h3><p>Copy the example settings file. You can skip this — it runs fine with nothing configured.</p></div></div>
+            <div class="step"><div><h3>Run a cycle</h3><p>Run the demo. It builds a small example dataset, thinks it through offline, and prints its brief.</p></div></div>
+          </div>
+<pre><code>uv sync
+cp .env.example .env        # optional
+uv run python scripts/run_demo_cycle.py</code></pre>
+        </div>
+
+        <div class="section">
+          <h2>What you get back</h2>
+          <p class="lead">A short brief, written to be glanceable (example shown — yours will reflect the data):</p>
+<pre><code>Eric - TheSlowBrain
+Stocks to buy are: none
+Stocks to sell are: none
+Current portfolio stocks are: AAA, BBB, CCC
+Profit since first trade as a percentage is: -0.20%</code></pre>
+          <div class="callout ok"><p>✅ Seeing "none to buy" is normal and healthy — the brain only speaks up when the evidence is genuinely strong.</p></div>
+        </div>
+      </section>
+
+      <!-- ================= INTERMEDIATE ================= -->
+      <section class="panel" id="intermediate" role="tabpanel">
+        <div class="section">
+          <h2>How a decision is made</h2>
+          <p class="lead">Each run flows through the same pipeline. Nothing reaches a decision without passing the guards.</p>
+          <div class="steps">
+            <div class="step"><div><h3>Import raw evidence</h3><p>Research ideas + their historical forward returns are imported with a checksum manifest. Old generated reports are never imported as truth.</p></div></div>
+            <div class="step"><div><h3>Build features</h3><p>Price, volume, trend, momentum and candle context — plus optional read-only market data (Alpha Vantage → Finnhub → Yahoo).</p></div></div>
+            <div class="step"><div><h3>Quarantine bad data</h3><p>Malformed rows and implausible penny-stock returns are flagged and excluded from decisions and tests.</p></div></div>
+            <div class="step"><div><h3>Score with the rubric</h3><p>An explicit, versioned rubric assigns one of the five labels.</p></div></div>
+            <div class="step"><div><h3>Backtest &amp; guard</h3><p>Out-of-sample tests, costs, drawdown, and overfitting checks decide whether a better rubric is worth adopting.</p></div></div>
+            <div class="step"><div><h3>Review &amp; calibrate</h3><p>An evaluation council scores quality; results are calibrated against human-verified examples.</p></div></div>
+            <div class="step"><div><h3>Shadow-learn &amp; report</h3><p>A small learning model trains in the background (but cannot take over), then the brief and track record are written.</p></div></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>The labels, a little deeper</h2>
+          <table>
+            <tr><th>Label</th><th>When it appears</th></tr>
+            <tr><td><b style="color:#059669">BUY</b></td><td>High score that clears every quality, risk, and data gate.</td></tr>
+            <tr><td><b style="color:#e11d48">SELL</b></td><td>Exit or negative signal on a name you hold.</td></tr>
+            <tr><td><b style="color:#64748b">HOLD</b></td><td>Neutral — no meaningful edge either way.</td></tr>
+            <tr><td><b style="color:#d97706">WATCHLIST</b></td><td>A near-miss in the band just below the buy threshold.</td></tr>
+            <tr><td><b style="color:#b91c1c">AVOID</b></td><td>A high score <i>actively blocked</i> by a failed gate — an explicit negative screen.</td></tr>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>What each check looks at</h2>
+          <div class="grid g2">
+            <div class="card sky"><h3>Data quality</h3><p>Malformed JSON, missing fields, invalid numbers, implausible returns.</p></div>
+            <div class="card teal"><h3>Market evidence</h3><p>Benchmark return, liquidity, and universe membership — honestly labelled when only a proxy is available.</p></div>
+            <div class="card amber"><h3>Backtest statistics</h3><p>Validation + separate confirmation, deflated Sharpe, overfitting probability, drawdown, after-cost returns.</p></div>
+            <div class="card violet"><h3>Evaluation council</h3><p>Profit evidence, risk control, execution safety, report honesty, economic rationale.</p></div>
+            <div class="card em"><h3>Human calibration</h3><p>Agreement with a held-out set of human-verified labels (reported honestly, non-binding at low sample size).</p></div>
+            <div class="card rose"><h3>Execution safety</h3><p>Position sizing, cash reserve, sector caps — all order intents stay blocked by default.</p></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Scripts you actually run</h2>
+          <table>
+            <tr><th>Command</th><th>Does</th></tr>
+            <tr><td><code>scripts/run_demo_cycle.py</code></td><td>One full cycle on synthetic data, fully offline.</td></tr>
+            <tr><td><code>scripts/run_first_slowbrain_cycle.py</code></td><td>A cycle on your own configured dataset.</td></tr>
+            <tr><td><code>scripts/run_shadow_cycles.py</code></td><td>Repeated paper/shadow runs to gather evidence.</td></tr>
+            <tr><td><code>scripts/run_daily_slowbrain.py</code></td><td>The unattended daily run (shadow-only).</td></tr>
+            <tr><td><code>scripts/send_eric_telegram.py</code></td><td>Send the brief to Telegram (dry-run unless <code>--send</code>).</td></tr>
+          </table>
+          <p class="lead" style="margin-top:14px">Dependencies are deliberately tiny: <b>Python 3.13+</b>, one runtime package
+            (<code>openai</code>, only for the optional judge), and a <b>standard-library-only core</b> — no numpy, pandas, or PyTorch.</p>
+        </div>
+      </section>
+
+      <!-- ================= EXPERT ================= -->
+      <section class="panel" id="expert" role="tabpanel">
+        <div class="section">
+          <h2>Architecture map</h2>
+          <p class="lead">Single-responsibility modules under <code>src/slowbrain/</code>; the workflow orchestrates them.</p>
+          <div class="grid g3">
+            <div class="card"><h3>Evidence</h3><p><code>data_import</code>, <code>features</code>, <code>data_quality</code>, <code>technical_context</code></p></div>
+            <div class="card sky"><h3>Market data</h3><p><code>market_data</code>, <code>market_data_vendors</code> (AV/Finnhub/Yahoo + fallback), <code>market_data_cache</code></p></div>
+            <div class="card amber"><h3>Decisions</h3><p><code>rubrics</code>, <code>hypotheses</code>, <code>optimizer</code>, <code>grader_council</code></p></div>
+            <div class="card teal"><h3>Backtest</h3><p><code>backtest</code> (core + stats), <code>costs</code>, <code>accounting</code></p></div>
+            <div class="card violet"><h3>Evaluation</h3><p><code>eval_council</code>, <code>human_anchor</code>, <code>human_labeling</code></p></div>
+            <div class="card em"><h3>Learning</h3><p><code>microgix</code> (autograd), <code>gating_model</code>, <code>learning_state</code></p></div>
+            <div class="card rose"><h3>Execution</h3><p><code>cio</code>, <code>trading212</code>, <code>live_execution</code>(+support)</p></div>
+            <div class="card"><h3>Reporting</h3><p><code>reporting</code>, <code>decision_capture</code>, <code>shadow_runner</code>, <code>telegram</code></p></div>
+            <div class="card sky"><h3>Orchestration</h3><p><code>workflow.run_first_cycle</code>, <code>config</code></p></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>The learning gate</h2>
+          <p class="lead">A from-scratch <b>scalar autograd engine</b> (<code>microgix</code>, ~150 lines, pure stdlib —
+            reverse-mode backprop, no numpy/torch) powers a small logistic gate over the five labels, trained on
+            historical net forward returns.</p>
+          <div class="grid g2">
+            <div class="card em"><h3>Shadow-only</h3><p>Selected source stays <code>baseline_fallback</code>; the gate reports metrics but cannot replace the rubric decision path.</p></div>
+            <div class="card amber"><h3>Drift guard + hard fallback</h3><p>A guard compares against the baseline; promotion requires beating it on accuracy <i>and</i> Brier <i>and</i> anchor agreement, out of sample.</p></div>
+            <div class="card violet"><h3>Held-out anchor</h3><p>30 human-verified labels are scored as an anchor only — never in any training fold.</p></div>
+            <div class="card sky"><h3>Calibration</h3><p>Reports accuracy, Brier score, expected calibration error (ECE), and anchor kappa.</p></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Statistical rigor</h2>
+          <ul>
+            <li><b>Leakage control:</b> purged + embargoed cross-validation, and a separate confirmation holdout distinct from the validation set.</li>
+            <li><b>Deflated Sharpe ratio</b> with a p-value, accounting for the number of trials.</li>
+            <li><b>Probability of backtest overfitting</b> (CSCV-style) alongside skew/kurtosis of returns.</li>
+            <li><b>Multiple-testing correction</b> on adoption significance; degenerate / sign-flip candidates are rejected.</li>
+            <li><b>Outcome quarantine:</b> sub-$1 names with implausible forward returns are flagged error-severity and excluded from BUY/backtest/training evidence.</li>
+            <li><b>Walk-forward windows</b>, after-cost returns, turnover, drawdown, Sortino/Calmar, and capacity flags.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Broker boundary (gated, off by default)</h2>
+          <p class="lead">A manual Trading 212 path exists for completeness, but a live order is impossible unless <i>every</i> gate passes:</p>
+          <div class="pills">
+            <span class="pill">fresh ready preview</span>
+            <span class="pill">process-scoped enable flag</span>
+            <span class="pill">explicit <code>--execute</code></span>
+            <span class="pill">matching approval token</span>
+            <span class="pill">valid broker health</span>
+            <span class="pill">duplicate-ledger clearance</span>
+            <span class="pill">post-submit reconciliation</span>
+          </div>
+          <div class="callout block"><p>🚫 The scheduled daily runner is shadow-only. It never sets the live flag and never calls the submit path.</p></div>
+        </div>
+
+        <div class="section">
+          <h2>Extending it safely</h2>
+          <div class="grid g2">
+            <div class="card teal"><h3>Stay in the pipeline</h3><p>Add evidence/features upstream of scoring; never create a path that reaches a decision without backtest + eval + safety checks.</p></div>
+            <div class="card amber"><h3>Test both layers</h3><p>Anything touching money, persisted state, or branching logic needs unit <i>and</i> integration tests. Modules stay under ~500 lines (enforced).</p></div>
+            <div class="card violet"><h3>Earn promotion</h3><p>The learned gate gains influence only via the documented out-of-sample criteria — never by default, never because a schedule ran.</p></div>
+            <div class="card em"><h3>Keep it honest</h3><p>Proxy/missing/low-sample/stale evidence must be labelled as such. No false proof.</p></div>
+          </div>
+          <p class="lead" style="margin-top:16px">Full prose: see <a href="HOW_IT_WORKS.md">HOW_IT_WORKS.md</a>.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Static, self-contained, no external dependencies · Research only — not financial advice · MIT licensed.
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+      var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+      function select(name) {
+        tabs.forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.tab === name)); });
+        panels.forEach(function (p) { p.classList.toggle('active', p.id === name); });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      tabs.forEach(function (t) {
+        t.addEventListener('click', function () { select(t.dataset.tab); });
+        t.addEventListener('keydown', function (e) {
+          var i = tabs.indexOf(t);
+          if (e.key === 'ArrowRight') { e.preventDefault(); tabs[(i + 1) % tabs.length].focus(); }
+          if (e.key === 'ArrowLeft') { e.preventDefault(); tabs[(i - 1 + tabs.length) % tabs.length].focus(); }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
