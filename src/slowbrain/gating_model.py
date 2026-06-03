@@ -9,20 +9,34 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass
 from math import exp
-from typing import cast
+from typing import Literal, cast
 
 from .data_quality import has_error
 from .eval_council import HumanLabel
-from .models import FeatureVector, RubricVersion
+from .models import DecisionAction, FeatureVector, RubricVersion
 from .rubrics import decide_feature, score_feature
 
 GATING_LABELS: tuple[HumanLabel, ...] = ("BUY", "SELL", "HOLD", "AVOID", "WATCHLIST")
+TargetLabelMode = Literal["absolute_return", "cross_sectional_rank"]
 FEATURE_NAMES = (
     "rubric_score",
     "signed_sentiment_confidence",
     "catalyst_strength",
     "momentum_20d_norm",
     "mean_reversion_norm",
+    "rsi_14_norm",
+    "macd_bullish",
+    "macd_bearish",
+    "atr_pct_14_norm",
+    "momentum_63d_norm",
+    "volume_ratio_20d_norm",
+    "rsi_14_cross_sectional_z",
+    "momentum_63d_cross_sectional_z",
+    "volume_ratio_cross_sectional_z",
+    "value_score",
+    "fundamental_quality_score",
+    "size_score",
+    "liquidity_score",
     "trend_up",
     "trend_down",
     "volume_confirmed",
@@ -92,10 +106,19 @@ class GatingModelReport:
     labels: tuple[HumanLabel, ...]
     feature_names: tuple[str, ...]
     gate_weights: tuple[tuple[float, ...], ...] = ()
+    target_label_mode: TargetLabelMode = "absolute_return"
 
 
-def build_gating_dataset(features: Sequence[FeatureVector], rubric: RubricVersion) -> tuple[GatingDatasetRow, ...]:
-    return tuple(_row(feature, rubric) for feature in clean_ordered_features(features))
+def build_gating_dataset(
+    features: Sequence[FeatureVector],
+    rubric: RubricVersion,
+    *,
+    target_label_mode: TargetLabelMode = "absolute_return",
+) -> tuple[GatingDatasetRow, ...]:
+    return tuple(
+        _row(feature, rubric, target_label_mode=target_label_mode)
+        for feature in clean_ordered_features(features)
+    )
 
 
 def clean_ordered_features(features: Sequence[FeatureVector]) -> tuple[FeatureVector, ...]:
@@ -123,14 +146,20 @@ def target_label_for_return(net_return_pct: float) -> HumanLabel:
     return "HOLD"
 
 
-def _row(feature: FeatureVector, rubric: RubricVersion) -> GatingDatasetRow:
+def target_label_for_feature(feature: FeatureVector, *, mode: TargetLabelMode = "absolute_return") -> HumanLabel:
+    if mode == "cross_sectional_rank" and feature.rank_label is not None:
+        return _human_label(feature.rank_label)
+    return target_label_for_return(feature.net_return_pct)
+
+
+def _row(feature: FeatureVector, rubric: RubricVersion, *, target_label_mode: TargetLabelMode) -> GatingDatasetRow:
     return GatingDatasetRow(
         idea_id=feature.idea_id,
         ticker=feature.ticker,
         signal_date=feature.signal_date,
         horizon_days=feature.horizon_days,
         features=feature_values(feature, rubric),
-        target_label=target_label_for_return(feature.net_return_pct),
+        target_label=target_label_for_feature(feature, mode=target_label_mode),
         baseline_label=cast(HumanLabel, decide_feature(feature, rubric).action),
         forward_return_pct=feature.net_return_pct,
     )
@@ -148,6 +177,19 @@ def feature_values(feature: FeatureVector, rubric: RubricVersion) -> tuple[float
         _clamp(feature.catalyst_strength, 0.0, 1.0),
         _clamp(feature.momentum_20d_pct / 20.0, -1.0, 1.0),
         _clamp(-feature.mean_reversion_z_20d / 3.0, -1.0, 1.0),
+        _clamp(feature.rsi_14 / 100.0, 0.0, 1.0),
+        1.0 if feature.macd_signal == "bullish" else 0.0,
+        1.0 if feature.macd_signal == "bearish" else 0.0,
+        _clamp(feature.atr_pct_14 / 10.0, 0.0, 1.0),
+        _clamp(feature.momentum_63d_pct / 50.0, -1.0, 1.0),
+        _clamp(feature.volume_ratio_20d / 3.0, 0.0, 1.0),
+        _clamp(_zscore(feature, "rsi_14") / 3.0, -1.0, 1.0),
+        _clamp(_zscore(feature, "momentum_63d_pct") / 3.0, -1.0, 1.0),
+        _clamp(_zscore(feature, "volume_ratio_20d") / 3.0, -1.0, 1.0),
+        _clamp(feature.value_score, -1.0, 1.0),
+        _clamp(feature.fundamental_quality_score, -1.0, 1.0),
+        _clamp(feature.size_score, -1.0, 1.0),
+        _clamp(feature.liquidity_score, -1.0, 1.0),
         1.0 if feature.trend == "uptrend" else 0.0,
         1.0 if feature.trend == "downtrend" else 0.0,
         1.0 if feature.volume_confirmed else 0.0,
@@ -172,3 +214,11 @@ def _dot(weights: Sequence[float], values: Sequence[float]) -> float:
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
+
+
+def _zscore(feature: FeatureVector, name: str) -> float:
+    return feature.cross_sectional_zscores.get(name, 0.0)
+
+
+def _human_label(label: DecisionAction) -> HumanLabel:
+    return cast(HumanLabel, label)

@@ -26,6 +26,7 @@ from .gating_model import (
     GatingDatasetRow,
     GatingModelReport,
     LogisticGate,
+    TargetLabelMode,
     build_gating_dataset,
     clean_ordered_features,
 )
@@ -49,6 +50,7 @@ def evaluate_gating_model(
     training_row_cap: int = 2_000,
     active_stage: PromotionStage = "shadow",
     warm_start_gate: LogisticGate | None = None,
+    target_label_mode: TargetLabelMode = "absolute_return",
 ) -> GatingModelReport:
     """Train/evaluate the gate and keep baseline fallback unless it earns promotion.
 
@@ -56,9 +58,9 @@ def evaluate_gating_model(
     ``shadow`` keeps the hard baseline fallback, otherwise the report records the learned gate as the
     selected source. ``warm_start_gate`` (the persisted gate) seeds training so learning compounds.
     """
-    rows = build_gating_dataset(features, rubric)
+    rows = build_gating_dataset(features, rubric, target_label_mode=target_label_mode)
     if len(rows) < 6:
-        return _empty_report(len(rows), "insufficient_gating_rows")
+        return _empty_report(len(rows), "insufficient_gating_rows", target_label_mode=target_label_mode)
 
     train_features, validation_features, confirmation_features = purged_embargoed_split(
         clean_ordered_features(features),
@@ -66,9 +68,9 @@ def evaluate_gating_model(
         validation_fraction=0.15,
         embargo_count=min(10, max(0, len(rows) // 20)),
     )
-    train_rows = build_gating_dataset(train_features, rubric)
-    validation_rows = build_gating_dataset(validation_features, rubric)
-    confirmation_rows = build_gating_dataset(confirmation_features, rubric)
+    train_rows = build_gating_dataset(train_features, rubric, target_label_mode=target_label_mode)
+    validation_rows = build_gating_dataset(validation_features, rubric, target_label_mode=target_label_mode)
+    confirmation_rows = build_gating_dataset(confirmation_features, rubric, target_label_mode=target_label_mode)
     fit_rows = _bounded_rows(train_rows, training_row_cap)
     gate, training_loss = train_gate(
         fit_rows,
@@ -133,6 +135,7 @@ def evaluate_gating_model(
         labels=GATING_LABELS,
         feature_names=FEATURE_NAMES,
         gate_weights=gate.weights,
+        target_label_mode=target_label_mode,
     )
 
 
@@ -334,7 +337,12 @@ def _fallback_reasons(
     return tuple(reasons)
 
 
-def _empty_report(sample_count: int, reason: str) -> GatingModelReport:
+def _empty_report(
+    sample_count: int,
+    reason: str,
+    *,
+    target_label_mode: TargetLabelMode = "absolute_return",
+) -> GatingModelReport:
     return GatingModelReport(
         status="not_available",
         selected_source="baseline_fallback",
@@ -360,4 +368,5 @@ def _empty_report(sample_count: int, reason: str) -> GatingModelReport:
         labels=GATING_LABELS,
         feature_names=FEATURE_NAMES,
         gate_weights=(),
+        target_label_mode=target_label_mode,
     )

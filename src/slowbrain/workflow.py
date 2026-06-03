@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import asdict
 from pathlib import Path
 from typing import cast
 
 from .backtest import economic_edge, evaluate_rubric
-from .config import load_config
+from .config import AppConfig, load_config
 from .data_import import MANIFEST_NAME, default_import_root, load_manifest
 from .decision_capture import (
     DECISION_CAPTURE_JSONL,
@@ -15,9 +16,11 @@ from .decision_capture import (
     append_decision_outcome_stream,
     write_decision_capture,
 )
+from .enrichment import PointInTimeEnrichment, join_point_in_time_enrichment, load_pit_enrichment_records
 from .eval_council import HumanLabel, OpenAIJudgeClient, calibrate_against_humans, load_human_examples
 from .features import (
     SUPPORTED_FORWARD_HORIZONS,
+    attach_cross_sectional_context,
     load_features_for_idea_ids_from_legacy_sqlite,
     load_features_from_legacy_sqlite,
     load_training_features_from_legacy_sqlite,
@@ -29,6 +32,7 @@ from .gating_apply import (
     gate_from_state,
     gate_secondary_guards_passed,
 )
+from .gating_model import TargetLabelMode
 from .gating_training import evaluate_gating_model
 from .grader_council import propose_rubric_candidates
 from .human_anchor import HUMAN_ANCHOR_JSON
@@ -50,6 +54,7 @@ from .learning_state import (
 )
 from .market_data import warm_market_data_provider
 from .market_data_vendors import build_market_data_provider
+from .models import FeatureVector
 from .optimizer import select_rubric
 from .promotion import evaluate_promotion, next_stage
 from .reporting import build_eric_brief, write_first_report
@@ -85,6 +90,9 @@ def run_first_cycle(project_root: Path, *, feature_limit: int | None = 5000) -> 
         limit=feature_limit,
         exclude_idea_ids=anchor_ids,
     )
+    pit_records = _load_pit_records(config)
+    features = _apply_pit_enrichment(features, pit_records)
+    gating_features = _apply_pit_enrichment(gating_features, pit_records)
     market_data_provider = build_market_data_provider(config, project_root=project_root)
     warm_market_data_provider(market_data_provider, features)
     candidates = propose_rubric_candidates(active_rubric, features)
@@ -147,6 +155,7 @@ def run_first_cycle(project_root: Path, *, feature_limit: int | None = 5000) -> 
         idea_ids=anchor_ids,
         horizon_days=10,
     )
+    anchor_features = _apply_pit_enrichment(anchor_features, pit_records)
     automated_anchor_labels = {
         feature.idea_id: cast(HumanLabel, decide_feature(feature, selected_rubric).action)
         for feature in anchor_features
@@ -159,6 +168,7 @@ def run_first_cycle(project_root: Path, *, feature_limit: int | None = 5000) -> 
         anchor_features=anchor_features,
         active_stage=active_stage,
         warm_start_gate=persisted_gate,
+        target_label_mode=cast(TargetLabelMode, config.gating_label_mode),
     )
     gating_gate_state_path = persist_gating_gate(gating_gate_state_target, gating_model, run_id=run_id)
     # Re-grade the freshly-trained gate on PROFIT (primary) + calibration/drift (secondary), then run
@@ -234,3 +244,20 @@ def run_first_cycle(project_root: Path, *, feature_limit: int | None = 5000) -> 
         gating_gate_state_path=gating_gate_state_path,
     )
     return payload
+
+
+def _load_pit_records(config: AppConfig) -> tuple[PointInTimeEnrichment, ...]:
+    if not config.pit_enrichment_enabled or config.pit_enrichment_path is None:
+        return ()
+    if not config.pit_enrichment_path.exists():
+        raise FileNotFoundError(f"PIT enrichment path does not exist: {config.pit_enrichment_path}")
+    return load_pit_enrichment_records(config.pit_enrichment_path)
+
+
+def _apply_pit_enrichment(
+    features: Sequence[FeatureVector],
+    records: tuple[PointInTimeEnrichment, ...],
+) -> list[FeatureVector]:
+    if not records:
+        return list(features)
+    return attach_cross_sectional_context(join_point_in_time_enrichment(features, records))

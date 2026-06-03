@@ -32,6 +32,9 @@ class AppConfig:
     market_data_benchmark_symbol: str = "SPY"
     gating_stage_override: PromotionStage | None = None
     gating_required_streak: int = DEFAULT_REQUIRED_STREAK
+    gating_label_mode: str = "absolute_return"
+    pit_enrichment_enabled: bool = False
+    pit_enrichment_path: Path | None = None
 
 
 def load_config(project_root: Path | None = None) -> AppConfig:
@@ -63,6 +66,9 @@ def load_config(project_root: Path | None = None) -> AppConfig:
         or "SPY",
         gating_stage_override=_gating_stage_override(),
         gating_required_streak=_positive_int_env("SLOWBRAIN_GATING_REQUIRED_STREAK", default=DEFAULT_REQUIRED_STREAK),
+        gating_label_mode=_gating_label_mode(),
+        pit_enrichment_enabled=_bool_env("SLOWBRAIN_PIT_ENRICHMENT_ENABLED", default=False),
+        pit_enrichment_path=_optional_path_env("SLOWBRAIN_PIT_ENRICHMENT_PATH"),
     )
 
 
@@ -86,6 +92,13 @@ def _positive_int_env(name: str, *, default: int) -> int:
     except ValueError:
         return default
     return parsed if parsed > 0 else default
+
+
+def _gating_label_mode() -> str:
+    value = os.environ.get("SLOWBRAIN_GATING_LABEL_MODE", "absolute_return").strip().lower()
+    if value in {"absolute_return", "cross_sectional_rank"}:
+        return value
+    return "absolute_return"
 
 
 def load_dotenv(project_root: Path | None = None) -> None:

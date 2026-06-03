@@ -60,7 +60,10 @@ def _write_buy_sqlite(path: Path, *, rows: int = 60) -> None:
                 "INSERT INTO step2_research_ideas VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     idea_id, "2026-01-01T00:00:00Z", f"case_{index}", f"cand_{index}",
-                    "AAPL" if index % 2 == 0 else "MSFT", f"2026-{index:04d}", "Synthetic", "Evidence",
+                    "AAPL" if index % 2 == 0 else "MSFT",
+                    f"2026-01-{index % 28 + 1:02d}",
+                    "Synthetic",
+                    "Evidence",
                     "positive", 1.0, 1.0, "buy", "pass", "pass", 1, 100.0, _SIGNAL_JSON, "{}", "fixture",
                 ),
             )

@@ -43,6 +43,19 @@ class FeatureVector:
     horizon_days: int = 10
     outcome_future_date: str = ""
     entry_price: float | None = None
+    rsi_14: float = 0.0
+    macd_signal: str = "unknown"
+    atr_pct_14: float = 0.0
+    momentum_63d_pct: float = 0.0
+    volume_ratio_20d: float = 0.0
+    value_score: float = 0.0
+    fundamental_quality_score: float = 0.0
+    size_score: float = 0.0
+    liquidity_score: float = 0.0
+    pit_enrichment_source: str = ""
+    pit_enrichment_available_date: str = ""
+    cross_sectional_zscores: Mapping[str, float] = field(default_factory=dict)
+    rank_label: DecisionAction | None = None
 
 
 @dataclass(frozen=True)

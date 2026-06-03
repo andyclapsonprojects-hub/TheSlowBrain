@@ -15,7 +15,7 @@ def _buy_feature(index: int, *, net: float) -> FeatureVector:
     return FeatureVector(
         idea_id=f"idea-{index:04d}",
         ticker=f"TIC{index:04d}",
-        signal_date=f"2026-{index:04d}",
+        signal_date=f"2026-01-{index % 28 + 1:02d}",
         sentiment="positive",
         sentiment_confidence=1.0,
         catalyst_strength=1.0,
