@@ -40,9 +40,10 @@ labelled as such instead of being dressed up as proof.
   rubric only when guarded, after-cost evidence genuinely beats the current one.
 - **Reviews quality** with an evaluation council (deterministic dimensions + an optional OpenAI
   judge) and calibrates against a held-out set of human-verified labels.
-- **Learns slowly in shadow mode**: a tiny from-scratch neural gate trains on historical
-  outcomes and reports its metrics, but stays behind a hard baseline fallback — it cannot take
-  over trading.
+- **Learns slowly, earns its way**: a tiny from-scratch neural gate trains on historical
+  outcomes and is graded on after-cost, out-of-sample profit. It starts in shadow and can climb a
+  profit-graded ladder — veto → co-decide → primary (proposing decisions, with the rubric as a
+  guardrail) — demoting automatically if its edge fades. All paper/shadow.
 - **Reports** a concise brief and append-only track record. Broker execution stays gated.
 
 ### The five labels

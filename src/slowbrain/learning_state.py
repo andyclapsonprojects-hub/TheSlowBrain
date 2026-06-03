@@ -11,12 +11,15 @@ from pathlib import Path
 from typing import Any, Literal
 
 from .data_quality import DataQualityIssue, Severity
-from .gating_model import GatingModelReport
+from .gating_apply import gate_from_state
+from .gating_model import GatingModelReport, LogisticGate
 from .models import FeatureVector, RubricVersion
 from .numeric import float_or_default, optional_float
+from .promotion import LADDER, PromotionEvent, PromotionStage, PromotionState
 
 ACTIVE_RUBRIC_STATE_JSON = Path("state/active_rubric.json")
 GATING_GATE_STATE_JSON = Path("state/gating_gate.json")
+GATING_PROMOTION_STATE_JSON = Path("state/gating_promotion.json")
 TRACK_RECORD_JSONL = Path("reports/track-record/daily-history.jsonl")
 
 
@@ -112,6 +115,79 @@ def persist_gating_gate(path: Path, report: GatingModelReport, *, run_id: str) -
         "broker_live_execution_allowed": False,
     }
     return _atomic_write_json(path, payload)
+
+
+def load_gating_gate(path: Path) -> LogisticGate | None:
+    """Rebuild the previously-trained gate from persisted state, for applying to today's decisions."""
+    if not path.exists():
+        return None
+    try:
+        payload = _load_json_object(path)
+    except (OSError, json.JSONDecodeError, ValueError):
+        return None
+    weights = payload.get("gate_weights")
+    labels = payload.get("labels")
+    feature_names = payload.get("feature_names")
+    if not isinstance(weights, list) or not isinstance(labels, list) or not isinstance(feature_names, list):
+        return None
+    typed_weights = [[float(value) for value in row] for row in weights if isinstance(row, (list, tuple))]
+    return gate_from_state(typed_weights, [str(item) for item in labels], [str(item) for item in feature_names])
+
+
+def load_promotion_state(path: Path, *, required_streak: int) -> PromotionState:
+    if not path.exists():
+        return PromotionState(required_streak=max(1, required_streak))
+    try:
+        payload = _load_json_object(path)
+    except (OSError, json.JSONDecodeError, ValueError):
+        return PromotionState(required_streak=max(1, required_streak))
+    return PromotionState(
+        stage=_stage(payload.get("stage")),
+        qualifying_streak=max(0, _int(payload.get("qualifying_streak"), default=0)),
+        required_streak=max(1, _int(payload.get("required_streak"), default=required_streak)),
+        last_status=_text(payload.get("last_status")) or "loaded",
+        last_reason=_text(payload.get("last_reason")) or "loaded_from_state",
+        history=_promotion_history(payload.get("history")),
+    )
+
+
+def persist_promotion_state(path: Path, state: PromotionState, *, run_id: str) -> Path:
+    payload = {
+        "schema": "theslowbrain.gating_promotion_state.v1",
+        "updated_at": datetime.now(UTC).isoformat(),
+        "run_id": run_id,
+        "stage": state.stage,
+        "qualifying_streak": state.qualifying_streak,
+        "required_streak": state.required_streak,
+        "last_status": state.last_status,
+        "last_reason": state.last_reason,
+        "broker_live_execution_allowed": False,
+        "history": [asdict(event) for event in state.history],
+    }
+    return _atomic_write_json(path, payload)
+
+
+def _stage(value: object) -> PromotionStage:
+    text = _text(value)
+    for stage in LADDER:
+        if text == stage:
+            return stage
+    return "shadow"
+
+
+def _promotion_history(value: object) -> tuple[PromotionEvent, ...]:
+    events: list[PromotionEvent] = []
+    for item in _sequence(value):
+        raw = _mapping(item)
+        events.append(
+            PromotionEvent(
+                stage=_stage(raw.get("stage")),
+                status=_text(raw.get("status")),
+                reason=_text(raw.get("reason")),
+                qualifying_streak=max(0, _int(raw.get("qualifying_streak"), default=0)),
+            )
+        )
+    return tuple(events)
 
 
 def load_outcome_stream_features(path: Path, *, exclude_idea_ids: Sequence[str]) -> OutcomeStreamLoadResult:
@@ -228,6 +304,7 @@ def _track_record_row(
     promotion = _mapping(report_payload.get("promotion_decision"))
     safety = _mapping(report_payload.get("safety"))
     gating = _mapping(report_payload.get("gating_model"))
+    gating_promotion = _mapping(report_payload.get("gating_promotion"))
     decisions = _sequence(report_payload.get("trade_decisions"))
     return {
         "schema": "theslowbrain.daily_track_record.v1",
@@ -243,6 +320,11 @@ def _track_record_row(
         "gating_status": _text(gating.get("status")),
         "gating_selected_source": _text(gating.get("selected_source")),
         "gating_fallback_active": bool(gating.get("fallback_active")),
+        "promotion_active_stage": _text(gating_promotion.get("active_stage_applied")),
+        "promotion_next_stage": _text(gating_promotion.get("next_stage")),
+        "promotion_qualifying_streak": _int(gating_promotion.get("qualifying_streak"), default=0),
+        "gate_decisions_changed": _int(gating_promotion.get("decisions_changed"), default=0),
+        "gate_economic_pass": bool(gating_promotion.get("economic_pass")),
         "broker_live_execution_allowed": bool(safety.get("broker_live_execution_allowed")),
         "active_rubric_state_path": str(active_rubric_state_path),
         "gating_gate_state_path": str(gating_gate_state_path),

@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from slowbrain.decision_capture import append_decision_outcome_stream
-from slowbrain.gating_model import evaluate_gating_model
+from slowbrain.gating_training import evaluate_gating_model
 from slowbrain.learning_state import (
     append_track_record,
     load_active_rubric,

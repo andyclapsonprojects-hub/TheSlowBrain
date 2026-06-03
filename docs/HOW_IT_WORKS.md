@@ -97,12 +97,17 @@ AVOID is "looks good but something is wrong" — an active negative screen, not 
 
 ## The learning loop (and why it's slow)
 
-State persists between runs: the adopted rubric and the gate's weights are saved and reloaded,
+State persists between runs: the adopted rubric and the gate's weights are saved and reloaded
+(the gate warm-starts from its own weights, so its learning compounds rather than restarting),
 and each run appends to an outcome stream and a daily track record, so evidence accumulates. But
-accumulation is not authority. The learned gate can only ever be *promoted* out of shadow by
-explicit, earned criteria — beating the baseline on accuracy **and** calibration **and**
-held-out anchor agreement, out of sample. The cron/daily runner exists to gather evidence, not
-to grant the model control. Until those bars are cleared, decisions follow the baseline rubric.
+accumulation is not authority. The gate earns influence only by **beating the rubric on after-cost,
+out-of-sample profit** (deflated-Sharpe and overfitting guarded), with calibration and held-out
+anchor agreement as secondary safety checks, for several consecutive runs. It then climbs a ladder
+one earned rung at a time — `shadow → confirm_only` (it may only veto a BUY) `→ co_decide` (veto +
+limited upgrades) `→ gate_primary` (the network proposes decisions and the rubric becomes a
+guardrail) — and is **automatically demoted** if its edge fades. The daily runner gathers evidence;
+it does not grant control. Until a rung is earned, decisions follow the baseline rubric, and live
+execution is never touched.
 
 ---
 

@@ -6,6 +6,8 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
+from .promotion import DEFAULT_REQUIRED_STREAK, LADDER, PromotionStage
+
 
 @dataclass(frozen=True)
 class AppConfig:
@@ -28,6 +30,8 @@ class AppConfig:
     market_data_cache_dir: Path | None = None
     market_data_usd_gbp_rate: float | None = None
     market_data_benchmark_symbol: str = "SPY"
+    gating_stage_override: PromotionStage | None = None
+    gating_required_streak: int = DEFAULT_REQUIRED_STREAK
 
 
 def load_config(project_root: Path | None = None) -> AppConfig:
@@ -57,7 +61,31 @@ def load_config(project_root: Path | None = None) -> AppConfig:
         market_data_usd_gbp_rate=_positive_float_env("SLOWBRAIN_MARKET_DATA_USD_GBP_RATE"),
         market_data_benchmark_symbol=os.environ.get("SLOWBRAIN_MARKET_DATA_BENCHMARK_SYMBOL", "SPY").strip().upper()
         or "SPY",
+        gating_stage_override=_gating_stage_override(),
+        gating_required_streak=_positive_int_env("SLOWBRAIN_GATING_REQUIRED_STREAK", default=DEFAULT_REQUIRED_STREAK),
     )
+
+
+def _gating_stage_override() -> PromotionStage | None:
+    value = os.environ.get("SLOWBRAIN_GATING_STAGE_OVERRIDE")
+    if value is None:
+        return None
+    text = value.strip().lower()
+    for stage in LADDER:
+        if text == stage:
+            return stage
+    return None
+
+
+def _positive_int_env(name: str, *, default: int) -> int:
+    value = os.environ.get(name)
+    if value is None or not value.strip():
+        return default
+    try:
+        parsed = int(value)
+    except ValueError:
+        return default
+    return parsed if parsed > 0 else default
 
 
 def load_dotenv(project_root: Path | None = None) -> None:

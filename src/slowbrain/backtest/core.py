@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from itertools import combinations
 
 from slowbrain.cio import CioPolicy
 from slowbrain.costs import CostEstimate, after_cost_return_pct_with_liquidity, estimate_trade_cost
 from slowbrain.data_quality import has_error
 from slowbrain.market_data import LiquiditySnapshot, MarketDataProvider
-from slowbrain.models import BacktestResult, FeatureVector, RubricVersion
+from slowbrain.models import BacktestResult, FeatureVector, RubricVersion, TradeDecision
 from slowbrain.rubrics import decide_feature
 
 from .stats import (
@@ -27,6 +27,15 @@ from .stats import (
     t_stat,
 )
 
+# A decision source: maps a feature to a TradeDecision. Defaults to the rubric when ``None``
+# is threaded through the profit helpers, so existing callers behave identically while the
+# learned gate can be graded on the exact same after-cost / DSR / PBO machinery.
+DecisionFn = Callable[[FeatureVector], TradeDecision]
+
+
+def _decide_one(feature: FeatureVector, rubric: RubricVersion, decide: DecisionFn | None) -> TradeDecision:
+    return decide(feature) if decide is not None else decide_feature(feature, rubric)
+
 
 def evaluate_rubric(
     features: Sequence[FeatureVector],
@@ -39,6 +48,7 @@ def evaluate_rubric(
     windows: int = 3,
     effective_trial_count: int = 1,
     market_data_provider: MarketDataProvider | None = None,
+    decide: DecisionFn | None = None,
 ) -> BacktestResult:
     ordered = sorted(features, key=lambda feature: (feature.signal_date, feature.idea_id))
     excluded_error_count = sum(1 for feature in ordered if has_error(feature.data_quality_issues))
@@ -53,21 +63,26 @@ def evaluate_rubric(
         validation_fraction=validation_fraction,
         embargo_count=min(10, max(0, len(clean_ordered) // 20)),
     )
-    train_profit, _, _, _ = _profit_for_features(train, rubric, market_data_provider=market_data_provider)
+    train_profit, _, _, _ = _profit_for_features(
+        train, rubric, market_data_provider=market_data_provider, decide=decide
+    )
     validation_profit, validation_trades, _, _ = _profit_for_features(
         validation,
         rubric,
         market_data_provider=market_data_provider,
+        decide=decide,
     )
     total_profit, trade_count, hit_rate, max_drawdown = _profit_for_features(
         clean_ordered,
         rubric,
         market_data_provider=market_data_provider,
+        decide=decide,
     )
     test_profit, test_trades, _, _ = _profit_for_features(
         confirmation,
         rubric,
         market_data_provider=market_data_provider,
+        decide=decide,
     )
     cv_pairs = combinatorial_purged_cv_train_test_profits(
         clean_ordered,
@@ -75,16 +90,21 @@ def evaluate_rubric(
         windows=windows,
         embargo_count=10,
         market_data_provider=market_data_provider,
+        decide=decide,
     )
     window_profits = [test_profit for _, test_profit in cv_pairs]
     worst_window = min(window_profits) if window_profits else 0.0
     positive_window_rate = positive_rate(window_profits)
-    confirmation_returns = _buy_returns(confirmation, rubric, market_data_provider=market_data_provider)
+    confirmation_returns = _buy_returns(confirmation, rubric, market_data_provider=market_data_provider, decide=decide)
     test_return_t_stat = t_stat(confirmation_returns)
     p_value = max(normal_p_value(test_return_t_stat), sign_flip_p_value(confirmation_returns))
     capacity_ok = all(_cost_for_feature(feature, market_data_provider).capacity_ok for feature in clean_ordered)
-    portfolio_returns = _portfolio_returns(clean_ordered, rubric, market_data_provider=market_data_provider)
-    benchmark_returns, benchmark_quality = _benchmark_returns(clean_ordered, rubric, market_data_provider)
+    portfolio_returns = _portfolio_returns(
+        clean_ordered, rubric, market_data_provider=market_data_provider, decide=decide
+    )
+    benchmark_returns, benchmark_quality = _benchmark_returns(
+        clean_ordered, rubric, market_data_provider, decide=decide
+    )
     liquidity_quality = _liquidity_quality(clean_ordered, market_data_provider)
     portfolio_total = compound_returns(portfolio_returns)
     benchmark_total = compound_returns(benchmark_returns)
@@ -215,8 +235,9 @@ def _profit_for_features(
     rubric: RubricVersion,
     *,
     market_data_provider: MarketDataProvider | None = None,
+    decide: DecisionFn | None = None,
 ) -> tuple[float, int, float, float]:
-    returns = _buy_returns(features, rubric, market_data_provider=market_data_provider)
+    returns = _buy_returns(features, rubric, market_data_provider=market_data_provider, decide=decide)
     if not returns:
         return 0.0, 0, 0.0, 0.0
     total = sum(returns)
@@ -249,10 +270,11 @@ def _buy_returns(
     rubric: RubricVersion,
     *,
     market_data_provider: MarketDataProvider | None = None,
+    decide: DecisionFn | None = None,
 ) -> list[float]:
     returns: list[float] = []
     for feature in features:
-        decision = decide_feature(feature, rubric)
+        decision = _decide_one(feature, rubric, decide)
         if decision.action == "BUY":
             returns.append(
                 after_cost_return_pct_with_liquidity(
@@ -269,12 +291,13 @@ def _portfolio_returns(
     rubric: RubricVersion,
     *,
     market_data_provider: MarketDataProvider | None = None,
+    decide: DecisionFn | None = None,
 ) -> list[float]:
     policy = CioPolicy()
     equity = policy.portfolio_value_gbp
     returns: list[float] = []
     for feature in features:
-        decision = decide_feature(feature, rubric)
+        decision = _decide_one(feature, rubric, decide)
         if decision.action != "BUY":
             continue
         notional = min(
@@ -297,13 +320,15 @@ def _benchmark_returns(
     features: Sequence[FeatureVector],
     rubric: RubricVersion,
     market_data_provider: MarketDataProvider | None,
+    *,
+    decide: DecisionFn | None = None,
 ) -> tuple[list[float], str]:
     returns: list[float] = []
     missing_provider_values = 0
     provider_values = 0
     buy_count = 0
     for feature in features:
-        if decide_feature(feature, rubric).action == "BUY":
+        if _decide_one(feature, rubric, decide).action == "BUY":
             buy_count += 1
             benchmark = market_data_provider.benchmark_return(feature) if market_data_provider else None
             if benchmark is None:
@@ -344,6 +369,7 @@ def _window_profits(
     *,
     windows: int,
     market_data_provider: MarketDataProvider | None = None,
+    decide: DecisionFn | None = None,
 ) -> list[float]:
     if not features:
         return []
@@ -354,6 +380,7 @@ def _window_profits(
             features[start : start + size],
             rubric,
             market_data_provider=market_data_provider,
+            decide=decide,
         )
         profits.append(profit)
     return profits[:windows]
@@ -365,8 +392,11 @@ def walk_forward_window_profits(
     *,
     windows: int,
     market_data_provider: MarketDataProvider | None = None,
+    decide: DecisionFn | None = None,
 ) -> list[float]:
-    return _window_profits(features, rubric, windows=windows, market_data_provider=market_data_provider)
+    return _window_profits(
+        features, rubric, windows=windows, market_data_provider=market_data_provider, decide=decide
+    )
 
 
 def combinatorial_purged_cv_profits(
@@ -376,6 +406,7 @@ def combinatorial_purged_cv_profits(
     windows: int,
     embargo_count: int,
     market_data_provider: MarketDataProvider | None = None,
+    decide: DecisionFn | None = None,
 ) -> list[float]:
     return [
         test_profit
@@ -385,6 +416,7 @@ def combinatorial_purged_cv_profits(
             windows=windows,
             embargo_count=embargo_count,
             market_data_provider=market_data_provider,
+            decide=decide,
         )
     ]
 
@@ -396,6 +428,7 @@ def combinatorial_purged_cv_train_test_profits(
     windows: int,
     embargo_count: int,
     market_data_provider: MarketDataProvider | None = None,
+    decide: DecisionFn | None = None,
 ) -> list[tuple[float, float]]:
     if not features:
         return []
@@ -406,8 +439,12 @@ def combinatorial_purged_cv_train_test_profits(
         purged = _purge_neighbors(chunks, excluded={left, right}, embargo_count=embargo_count)
         if not purged:
             purged = test_features
-        profit, _, _, _ = _profit_for_features(test_features, rubric, market_data_provider=market_data_provider)
-        train_profit, _, _, _ = _profit_for_features(purged, rubric, market_data_provider=market_data_provider)
+        profit, _, _, _ = _profit_for_features(
+            test_features, rubric, market_data_provider=market_data_provider, decide=decide
+        )
+        train_profit, _, _, _ = _profit_for_features(
+            purged, rubric, market_data_provider=market_data_provider, decide=decide
+        )
         profits.append((train_profit, profit if train_profit >= -25.0 else -abs(profit)))
     if profits:
         return profits
@@ -418,6 +455,7 @@ def combinatorial_purged_cv_train_test_profits(
             rubric,
             windows=windows,
             market_data_provider=market_data_provider,
+            decide=decide,
         )
     ]
 

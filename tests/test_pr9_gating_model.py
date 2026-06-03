@@ -5,11 +5,8 @@ from pathlib import Path
 from slowbrain.backtest import evaluate_rubric
 from slowbrain.data_quality import DataQualityIssue
 from slowbrain.eval_council import CalibrationReport, HumanExample
-from slowbrain.gating_model import (
-    build_gating_dataset,
-    evaluate_gating_model,
-    target_label_for_return,
-)
+from slowbrain.gating_model import build_gating_dataset, target_label_for_return
+from slowbrain.gating_training import evaluate_gating_model
 from slowbrain.microgix import Value
 from slowbrain.models import FeatureVector, PortfolioState, PromotionDecision
 from slowbrain.reporting import build_eric_brief, write_first_report
@@ -57,7 +54,7 @@ def test_gating_model_falls_back_when_confirmation_or_anchor_guard_fails() -> No
 
     assert report.fallback_active
     assert report.selected_source == "baseline_fallback"
-    assert "pr9_shadow_only_hard_fallback" in report.fallback_reason
+    assert "shadow_mode_hard_fallback" in report.fallback_reason
     assert report.anchor_count == 1
     assert report.baseline_anchor_kappa == 1.0
     assert report.drift_guard_passed is False

@@ -66,6 +66,7 @@ def write_first_report(
     outcome_stream_training: dict[str, object] | None = None,
     human_calibration: CalibrationReport | None = None,
     gating_model: GatingModelReport | None = None,
+    gating_promotion: dict[str, object] | None = None,
 ) -> dict[str, object]:
     payload: dict[str, object] = {
         "schema": "theslowbrain.first_report.v1",
@@ -85,6 +86,7 @@ def write_first_report(
         "outcome_stream_training": outcome_stream_training,
         "human_calibration": _human_calibration_payload(human_calibration),
         "gating_model": report_to_dict(gating_model) if gating_model is not None else None,
+        "gating_promotion": gating_promotion,
         "eric_brief": asdict(brief),
         "safety": {
             "old_reports_imported": False,

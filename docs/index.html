@@ -263,7 +263,7 @@ Profit since first trade as a percentage is: -0.20%</code></pre>
             <div class="step"><div><h3>Score with the rubric</h3><p>An explicit, versioned rubric assigns one of the five labels.</p></div></div>
             <div class="step"><div><h3>Backtest &amp; guard</h3><p>Out-of-sample tests, costs, drawdown, and overfitting checks decide whether a better rubric is worth adopting.</p></div></div>
             <div class="step"><div><h3>Review &amp; calibrate</h3><p>An evaluation council scores quality; results are calibrated against human-verified examples.</p></div></div>
-            <div class="step"><div><h3>Shadow-learn &amp; report</h3><p>A small learning model trains in the background (but cannot take over), then the brief and track record are written.</p></div></div>
+            <div class="step"><div><h3>Shadow-learn &amp; report</h3><p>A small learning model trains in the background and earns its way up a profit-graded ladder, then the brief and track record are written.</p></div></div>
           </div>
         </div>
 
@@ -330,8 +330,8 @@ Profit since first trade as a percentage is: -0.20%</code></pre>
             reverse-mode backprop, no numpy/torch) powers a small logistic gate over the five labels, trained on
             historical net forward returns.</p>
           <div class="grid g2">
-            <div class="card em"><h3>Shadow-only</h3><p>Selected source stays <code>baseline_fallback</code>; the gate reports metrics but cannot replace the rubric decision path.</p></div>
-            <div class="card amber"><h3>Drift guard + hard fallback</h3><p>A guard compares against the baseline; promotion requires beating it on accuracy <i>and</i> Brier <i>and</i> anchor agreement, out of sample.</p></div>
+            <div class="card em"><h3>Earns its way</h3><p>Starts in shadow; climbs <code>shadow → confirm_only → co_decide → gate_primary</code> one earned rung at a time. At <code>gate_primary</code> the NN proposes decisions and the rubric becomes a guardrail.</p></div>
+            <div class="card amber"><h3>Graded on profit, demotes</h3><p>Promotion needs the gate to beat the rubric on after-cost, out-of-sample return (deflated-Sharpe + PBO guarded); calibration and anchor agreement are secondary checks. If its edge fades, it auto-demotes.</p></div>
             <div class="card violet"><h3>Held-out anchor</h3><p>30 human-verified labels are scored as an anchor only — never in any training fold.</p></div>
             <div class="card sky"><h3>Calibration</h3><p>Reports accuracy, Brier score, expected calibration error (ECE), and anchor kappa.</p></div>
           </div>
