@@ -156,13 +156,8 @@ def test_finnhub_candle_success_no_data_and_quote_fixture(tmp_path: Path) -> Non
     assert missed.benchmark_return(feature("one", signal_date="2026-01-03")) is None
 
 
-def test_yahoo_crumb_handshake_and_chart_parse(tmp_path: Path) -> None:
-    transport = FakeTransport(
-        {
-            "/v1/test/getcrumb": "fixture-crumb",
-            "/v8/finance/chart/SPY": yahoo_chart_payload(),
-        }
-    )
+def test_yahoo_chart_fetch_and_parse_without_crumb(tmp_path: Path) -> None:
+    transport = FakeTransport({"/v8/finance/chart/SPY": yahoo_chart_payload()})
     provider = YahooProvider(
         cache=MarketDataCache(tmp_path, "yahoo"),
         benchmark_symbol="SPY",
@@ -174,8 +169,8 @@ def test_yahoo_crumb_handshake_and_chart_parse(tmp_path: Path) -> None:
 
     assert benchmark is not None
     assert benchmark.source == "yahoo:chart"
-    assert any("/v1/test/getcrumb" in url for url in transport.urls)
-    assert any("crumb=fixture-crumb" in url for url in transport.urls)
+    assert any("/v8/finance/chart/SPY" in url for url in transport.urls)
+    assert not any("getcrumb" in url for url in transport.urls)  # the chart endpoint needs no crumb
 
 
 def test_yahoo_malformed_or_throttled_response_misses(tmp_path: Path) -> None:
@@ -183,7 +178,7 @@ def test_yahoo_malformed_or_throttled_response_misses(tmp_path: Path) -> None:
         cache=MarketDataCache(tmp_path, "yahoo"),
         benchmark_symbol="SPY",
         quote_to_gbp_rate=0.80,
-        transport=FakeTransport({"/v1/test/getcrumb": "Too Many Requests"}),
+        transport=FakeTransport({"/v8/finance/chart/SPY": "Too Many Requests"}),
     )
 
     assert provider.benchmark_return(feature("one", signal_date="2026-01-03")) is None

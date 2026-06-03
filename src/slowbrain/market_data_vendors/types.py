@@ -52,8 +52,12 @@ class StdlibHttpTransport:
     def __init__(self) -> None:
         self._opener = build_opener(HTTPCookieProcessor())
 
+    # Yahoo's public endpoints reject non-browser User-Agents (the request fails), so present a
+    # standard browser UA for these read-only research GETs.
+    _USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) TheSlowBrain/0.1 market-data research"
+
     def __call__(self, url: str, timeout_seconds: float) -> JsonValue:
-        request = Request(url, headers={"User-Agent": "TheSlowBrain/0.1 market-data research"})
+        request = Request(url, headers={"User-Agent": self._USER_AGENT})
         with self._opener.open(request, timeout=timeout_seconds) as response:
             body = cast("bytes", response.read())
         text = body.decode("utf-8")

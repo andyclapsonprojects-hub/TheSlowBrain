@@ -35,7 +35,6 @@ from .types import (
     DEFAULT_HISTORY_START,
     FINNHUB_BASE_URL,
     YAHOO_BASE_URL,
-    YAHOO_CRUMB_URL,
     FinnhubQuote,
     FxRate,
     FxRateSource,
@@ -237,9 +236,8 @@ class YahooProvider:
         return prices
 
     def _fetch_chart_payload(self, symbol: str) -> JsonValue | None:
-        crumb = self._fetch_crumb()
-        if crumb is None:
-            return None
+        # The public v8 chart endpoint serves OHLCV without a crumb; only a browser User-Agent
+        # (set in the transport) is required. The crumb handshake is unreliable and unnecessary here.
         params = urlencode(
             {
                 "period1": str(int(DEFAULT_HISTORY_START.timestamp())),
@@ -247,7 +245,6 @@ class YahooProvider:
                 "interval": "1d",
                 "events": "history",
                 "includeAdjustedClose": "true",
-                "crumb": crumb,
             }
         )
         payload = _safe_transport_call(
@@ -258,15 +255,6 @@ class YahooProvider:
         if _yahoo_payload_is_miss(payload):
             return None
         return payload
-
-    def _fetch_crumb(self) -> str | None:
-        payload = _safe_transport_call(self._transport, YAHOO_CRUMB_URL, self._timeout_seconds)
-        if not isinstance(payload, str):
-            return None
-        crumb = payload.strip()
-        if not crumb or "too many" in crumb.lower() or "unauthor" in crumb.lower():
-            return None
-        return crumb
 
 
 class YahooUsdGbpRateProvider:
