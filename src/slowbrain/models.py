@@ -48,6 +48,12 @@ class FeatureVector:
     atr_pct_14: float = 0.0
     momentum_63d_pct: float = 0.0
     volume_ratio_20d: float = 0.0
+    bb_percent_b: float = 0.5
+    bb_bandwidth: float = 0.0
+    macd_hist_pct: float = 0.0
+    ema_trend_pct: float = 0.0
+    candle_signal: float = 0.0
+    sma_distance_pct: float = 0.0
     value_score: float = 0.0
     fundamental_quality_score: float = 0.0
     size_score: float = 0.0
