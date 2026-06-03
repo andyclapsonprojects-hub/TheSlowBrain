@@ -6,6 +6,7 @@ import sqlite3
 from collections import defaultdict
 from collections.abc import Iterable, Sequence
 from dataclasses import replace
+from math import tanh
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +21,9 @@ from .models import DecisionAction, FeatureVector
 from .numeric import optional_float
 
 SUPPORTED_FORWARD_HORIZONS = (1, 5, 10, 20)
+# Scales an absolute earnings-surprise percentage into a [0,1) materiality via tanh: a ~25% surprise
+# maps to ~0.76, larger surprises saturate toward 1.0 so outliers (e.g. -265%) do not dominate.
+EARNINGS_SURPRISE_SCALE = 25.0
 CROSS_SECTIONAL_NUMERIC_FIELDS = (
     "sentiment_confidence",
     "catalyst_strength",
@@ -207,13 +211,19 @@ def _row_to_feature(row: tuple[Any, ...]) -> FeatureVector:
             risk_status=risk_status,
         )
     )
+    sentiment = str(row[3] or "unknown").lower()
+    sentiment_confidence = parse_float(row[4], field="sentiment_confidence", issues=issues)
+    catalyst_strength = parse_float(row[5], field="catalyst_strength", issues=issues)
+    earnings = _earnings_signal(signal)
+    if earnings is not None:
+        sentiment, sentiment_confidence, catalyst_strength = earnings
     return FeatureVector(
         idea_id=str(row[0]),
         ticker=ticker,
         signal_date=signal_date,
-        sentiment=str(row[3] or "unknown").lower(),
-        sentiment_confidence=parse_float(row[4], field="sentiment_confidence", issues=issues),
-        catalyst_strength=parse_float(row[5], field="catalyst_strength", issues=issues),
+        sentiment=sentiment,
+        sentiment_confidence=sentiment_confidence,
+        catalyst_strength=catalyst_strength,
         quality_status=quality_status,
         risk_status=risk_status,
         trend=str(signal.get("trend") or "unknown").lower(),
@@ -248,6 +258,26 @@ def _signal_float(signal: dict[str, Any], key: str, issues: list[DataQualityIssu
     if key not in signal or signal.get(key) in (None, ""):
         return 0.0
     return parse_float(signal.get(key), field=f"signal_json.{key}", issues=issues)
+
+
+def _earnings_signal(signal: dict[str, Any]) -> tuple[str, float, float] | None:
+    """Derive (sentiment, sentiment_confidence, catalyst_strength) from a genuine earnings surprise.
+
+    The rubric treats catalyst as bullish-only, so the surprise *magnitude* becomes ``catalyst_strength``
+    (how material the event is) and its *direction* becomes ``sentiment`` (beat -> positive, miss ->
+    negative, inline -> neutral). Returns ``None`` when the row carries no earnings surprise. This is a
+    point-in-time signal: the source rows are dated on/after the earnings ``report_date``.
+    """
+    surprise_pct = optional_float(signal.get("surprise_pct"), allow_bool=False)
+    if surprise_pct is None:
+        return None
+    strength = round(tanh(abs(surprise_pct) / EARNINGS_SURPRISE_SCALE), 6)
+    surprise_class = str(signal.get("surprise_class") or "").lower()
+    if surprise_class == "beat" or (surprise_class not in {"miss", "inline"} and surprise_pct > 0.0):
+        return "positive", strength, strength
+    if surprise_class == "miss" or (surprise_class not in {"beat", "inline"} and surprise_pct < 0.0):
+        return "negative", strength, strength
+    return "neutral", 0.0, strength
 
 
 def _group_zscores(group: Sequence[FeatureVector]) -> dict[str, dict[str, float]]:

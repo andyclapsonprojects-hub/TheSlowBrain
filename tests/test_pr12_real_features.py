@@ -2,10 +2,16 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from math import tanh
 from pathlib import Path
 
 from slowbrain.enrichment import PointInTimeEnrichment, join_point_in_time_enrichment, load_pit_enrichment_records
-from slowbrain.features import attach_cross_sectional_context, load_training_features_from_legacy_sqlite
+from slowbrain.features import (
+    EARNINGS_SURPRISE_SCALE,
+    _earnings_signal,
+    attach_cross_sectional_context,
+    load_training_features_from_legacy_sqlite,
+)
 from slowbrain.gating_model import FEATURE_NAMES, build_gating_dataset, target_label_for_feature
 from slowbrain.models import DecisionAction, FeatureVector
 from slowbrain.rubrics import BASE_RUBRIC
@@ -158,6 +164,40 @@ def test_pit_enrichment_preserves_feature_when_no_safe_match_exists() -> None:
     assert invalid_date.pit_enrichment_source == ""
 
 
+def test_earnings_signal_maps_direction_to_sentiment_and_magnitude_to_catalyst() -> None:
+    expected = round(tanh(25.0 / EARNINGS_SURPRISE_SCALE), 6)
+    assert _earnings_signal({"surprise_class": "beat", "surprise_pct": 25.0}) == ("positive", expected, expected)
+    assert _earnings_signal({"surprise_class": "miss", "surprise_pct": -25.0}) == ("negative", expected, expected)
+    inline = _earnings_signal({"surprise_class": "inline", "surprise_pct": 5.0})
+    assert inline == ("neutral", 0.0, round(tanh(5.0 / EARNINGS_SURPRISE_SCALE), 6))
+    # direction is inferred from the sign when surprise_class is absent; a row with no surprise is skipped.
+    assert _earnings_signal({"surprise_pct": -10.0})[0] == "negative"
+    assert _earnings_signal({"trend": "uptrend"}) is None
+
+
+def test_earnings_surprise_overrides_sentiment_and_catalyst_through_loader(tmp_path: Path) -> None:
+    sqlite_path = tmp_path / "pipeline_runs.sqlite"
+    _write_sqlite(sqlite_path)
+    conn = sqlite3.connect(sqlite_path)
+    try:
+        _insert_idea(
+            conn, "beatco", "NVDA", "2026-01-10", 100.0, net=3.0,
+            signal_extra={"event_type": "earnings", "surprise_class": "beat", "surprise_pct": 25.0},
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    loaded = {f.idea_id: f for f in load_training_features_from_legacy_sqlite(sqlite_path, horizon_days=(10,))}
+    feature = loaded["beatco"]
+    expected = round(tanh(25.0 / EARNINGS_SURPRISE_SCALE), 6)
+
+    # the DB columns said sentiment=positive/0.9, catalyst=0.9; the genuine surprise overrides them.
+    assert feature.sentiment == "positive"
+    assert feature.sentiment_confidence == expected
+    assert feature.catalyst_strength == expected
+
+
 def _feature(
     idea_id: str,
     *,
@@ -243,8 +283,9 @@ def _insert_idea(
     price: float,
     *,
     net: float,
+    signal_extra: dict[str, object] | None = None,
 ) -> None:
-    signal = {
+    signal: dict[str, object] = {
         "trend": "uptrend",
         "momentum_20d_pct": 8,
         "mean_reversion_z_20d": 0,
@@ -255,6 +296,8 @@ def _insert_idea(
         "momentum_63d_pct": 11,
         "volume_ratio_20d": 1.8,
     }
+    if signal_extra:
+        signal.update(signal_extra)
     conn.execute(
         "INSERT INTO step2_research_ideas VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         (
