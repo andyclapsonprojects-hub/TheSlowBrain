@@ -23,7 +23,12 @@ import experiment_mlp_pullback as mlp  # reuse Sample, _build_ticker_samples, _t
 from slowbrain.config import load_config
 from slowbrain.market_data_vendors.providers import build_price_history_provider
 
-TICKERS = ("TSLA", "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "JPM", "UNH", "HD", "XOM", "CAT")
+# Long-standing S&P 500 blue-chips (in the index 15+ years, established the whole time -- no recent-IPO
+# "story" phase). Override on the command line: `python scripts/experiment_per_company.py JNJ KO PG ...`.
+DEFAULT_TICKERS = (
+    "JPM", "JNJ", "PG", "KO", "XOM", "CVX", "WMT", "HD", "MCD", "PEP", "IBM", "CAT",
+    "MMM", "DIS", "MRK", "PFE", "CSCO", "INTC", "AXP", "GS", "UNH", "ABT", "LOW", "COST",
+)
 
 
 def _avg(trades: list[mlp.Sample]) -> tuple[int, float, float]:
@@ -38,13 +43,14 @@ def main() -> int:
     if provider is None:
         print("Market data disabled.")
         return 1
+    tickers = tuple(t.upper() for t in sys.argv[1:]) or DEFAULT_TICKERS
     rng = random.Random(11)
     print(f"\n{'ticker':6} | {'OOS test window':23} | {'trained-model entry':26} | {'random entry':16} | buy & hold")
     print("-" * 100)
     nn_beats_random = 0
     nn_beats_hold = 0
     tested = 0
-    for ticker in TICKERS:
+    for ticker in tickers:
         bars = sorted(provider.daily_prices(ticker), key=lambda bar: bar.date)
         if len(bars) < 600:
             continue
