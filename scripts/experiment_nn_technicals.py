@@ -7,6 +7,7 @@ measures profit on a later out-of-sample window. Read-only; nothing is traded.
 
 from __future__ import annotations
 
+import os
 import random
 import sys
 from pathlib import Path
@@ -29,7 +30,7 @@ TICKERS = (
     "HD LOW MCD SBUX NKE TGT COST WMT PG KO PEP PM MO",
     "XOM CVX COP SLB EOG", "BA CAT GE HON UNP UPS LMT RTX DE", "DIS CMCSA NFLX T VZ",
 )
-HOLD = 20
+HOLD = int(os.environ.get("SLOWBRAIN_EXP_HOLD", "20"))
 COST_BPS = 15.0
 
 
