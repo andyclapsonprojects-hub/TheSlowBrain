@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_library_544d0223e8",
+  "title": "Python source scripts#2",
+  "summary": "Python source group scripts#2 with 12 files.",
+  "kind": "library",
+  "source": "python-source-group",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "scripts#2",
+      "symbol": "scripts#2",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "scripts/experiment_pullback_stress.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/experiment_signal_sweep.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/experiment_tesla_trade.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/experiment_tsla_candles.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/import_legacy_stock_data.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/ingest_enriched_labels.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/pull_ohlcv_indicators.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/run_daily_slowbrain.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/run_demo_cycle.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/run_first_slowbrain_cycle.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/run_shadow_cycles.py",
+      "reason": "source group scripts#2"
+    },
+    {
+      "path": "scripts/send_eric_telegram.py",
+      "reason": "source group scripts#2"
+    }
+  ],
+  "contextFiles": [],
+  "tests": [],
+  "tags": [
+    "python",
+    "source-group"
+  ],
+  "trustBoundaries": [],
+  "status": "error",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [
+    {
+      "runId": "20260611T181806-3977d2",
+      "kind": "review-error",
+      "summary": "codex provider failed: OpenAI Codex v0.121.0 (research preview)\n--------\nworkdir: C:\\Users\\AndyC\\projects\\TheSlowBrain\nmodel: gpt-5.5\nprovider: openai\napproval: never\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 019eb7e7-f312-7c10-b752-5846d4d6d464\n--------\nuser\nYou are reviewing one semantic feature for clawpatch.\n\nReturn strict JSON only. No markdown fences.\n\nProject:\n{\n  \"name\": \"TheSlowBrain\",\n  \"detected\": {\n    \"languages\": [\n      \"python\"\n    ],\n    \"frameworks\": [\n      \"pytest\"\n    ],\n    \"packageManagers\": [\n      \"uv\"\n    ],\n    \"commands\": {\n      \"typecheck\": \"uv run mypy .\",\n      \"lint\": \"uv run ruff check .\",\n      \"format\": \"uv run ruff format --check .\",\n      \"test\": \"uv run pytest\"\n    }\n  }\n}\n\nFeature:\n{\n  \"schemaVersion\": 1,\n  \"featureId\": \"feat_library_544d0223e8\",\n  \"title\": \"Python source scripts#2\",\n  \"summary\": \"Python source group scripts#2 with 12 files.\",\n  \"kind\": \"library\",\n  \"source\": \"python-source-group\",\n  \"confidence\": \"medium\",\n  \"entrypoints\": [\n    {\n      \"path\": \"scripts#2\",\n      \"symbol\": \"scripts#2\",\n      \"route\": null,\n      \"command\": null\n    }\n  ],\n  \"ownedFiles\": [\n    {\n      \"path\": \"scripts/experiment_pullback_stress.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/experiment_signal_sweep.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/experiment_tesla_trade.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/experiment_tsla_candles.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/import_legacy_stock_data.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/ingest_enriched_labels.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/pull_ohlcv_indicators.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/run_daily_slowbrain.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/run_demo_cycle.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/run_first_slowbrain_cycle.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/run_shadow_cycles.py\",\n      \"reason\": \"source group scripts#2\"\n    },\n    {\n      \"path\": \"scripts/send_eric_telegram.py\",\n      \"reason\": \"source group scripts#2\"\n    }\n  ],\n  \"contextFiles\": [],\n  \"tests\": [],\n  \"tags\": [\n    \"python\",\n    \"source-group\"\n  ],\n  \"trustBoundaries\": [],\n  \"status\": \"claimed\",\n  \"lock\": {\n    \"lockedByRunId\": \"20260611T181806-3977d2\",\n    \"lockedAt\": \"2026-06-11T18:18:06.877Z\",\n    \"hostname\": \"LAPTOP-QF26BVVL\",\n    \"pid\": 19716\n  },\n  \"findingIds\": [],\n  \"patchAttemptIds\": [],\n  \"analysisHistory\": [],\n  \"createdAt\": \"2026-06-11T18:14:29.296Z\",\n  \"updatedAt\": \"2026-06-11T18:18:06.890Z\"\n}\n\nReview categories:\n- correctness bugs\n- security issues\n- race/concurrency bugs\n- data loss/corruption\n- resource leaks\n- bad error handling\n- permission/auth gaps\n- API contract mismatches\n- missing/weak tests\n- release/build hazards\n- maintainability risks with concrete impact\n\n\n\nInspect owned files, context files, and linked tests. Treat included tests as first-class\nevidence of intended behavior. If tests contradict a suspected bug, either skip it or\ndowngrade confidence and explain the uncertainty. Avoid reporting behavior as a bug\nsolely because a helper name implies a broader contract. Deduplicate sibling/root-cause\nissues: when the same bug pattern appears in multiple owned files, emit one finding\nwith multiple evidence refs instead of separate one-off findings.\n\nAvoid speculative low-evidence findings. Evidence must point at included files.\n\nJSON shape:\n{\n  \"findings\": [\n    {\n      \"title\": \"string\",\n      \"category\": \"bug|security|performance|concurrency|api-contract|data-loss|test-gap|docs-gap|build-release|maintainability\",\n      \"severity\": \"critical|high|medium|low\",\n      \"confidence\": \"high|medium|low\",\n      \"e\n...[trimmed]...\nations\n\nimport argparse\nimport sys\nfrom pathlib import Path\n\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nfrom slowbrain.shadow_runner import run_shadow_cycles\n\n\ndef main() -> int:\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"--project-root\", type=Path, default=Path(__file__).resolve().parents[1])\n    parser.add_argument(\"--count\", type=int, default=3)\n    parser.add_argument(\"--feature-limit\", type=int, default=5000)\n    args = parser.parse_args()\n\n    summary = run_shadow_cycles(args.project_root, count=args.count, feature_limit=args.feature_limit)\n    print(\"TheSlowBrain shadow cycles complete.\")\n    print(f\"Run count: {summary['run_count']}\")\n    print(f\"Successful runs: {summary['successful_runs']}\")\n    print(f\"Failed runs: {summary['failed_runs']}\")\n    print(f\"Broker live execution allowed: {str(summary['broker_live_execution_allowed']).lower()}\")\n    lines = summary.get(\"latest_eric_brief_lines\")\n    if isinstance(lines, (list, tuple)):\n        print(\"\\n\".join(str(line) for line in lines))\n    return 0\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n\n\n--- scripts/send_eric_telegram.py\n\"\"\"Preview or send the latest Eric brief to Telegram.\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport json\nimport sys\nfrom dataclasses import asdict\nfrom datetime import UTC, datetime\nfrom pathlib import Path\n\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nfrom slowbrain.config import load_config\nfrom slowbrain.telegram import TelegramDeliveryResult, extract_eric_message, send_telegram_message\n\n\ndef main() -> int:\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"--project-root\", type=Path, default=Path(__file__).resolve().parents[1])\n    parser.add_argument(\"--report\", type=Path, default=Path(\"reports/first-slowbrain-report.json\"))\n    parser.add_argument(\"--send\", action=\"store_true\", help=\"Actually call Telegram. Default is dry-run preview.\")\n    args = parser.parse_args()\n\n    report_path = args.report if args.report.is_absolute() else args.project_root / args.report\n    report = json.loads(report_path.read_text(encoding=\"utf-8\"))\n    message = extract_eric_message(report)\n    result = send_telegram_message(load_config(args.project_root), message, send=args.send)\n    delivery_path = _write_delivery_record(args.project_root, report_path, message, args.send, result)\n\n    print(f\"Telegram status: {result.status}\")\n    print(f\"Reason: {result.reason}\")\n    print(f\"Delivery record: {delivery_path}\")\n    if not args.send:\n        print(message)\n    return 0 if result.status in {\"preview_only\", \"sent\"} else 2\n\n\ndef _write_delivery_record(\n    project_root: Path,\n    report_path: Path,\n    message: str,\n    send: bool,\n    result: TelegramDeliveryResult,\n) -> Path:\n    output_dir = project_root / \"reports\" / \"telegram-deliveries\"\n    output_dir.mkdir(parents=True, exist_ok=True)\n    created = datetime.now(UTC)\n    created_at = created.isoformat()\n    output_path = output_dir / f\"telegram-{created.strftime('%Y%m%dT%H%M%SZ')}.json\"\n    payload = {\n        \"schema\": \"theslowbrain.telegram_delivery.v1\",\n        \"created_at\": created_at,\n        \"report_path\": str(report_path),\n        \"mode\": \"send\" if send else \"dry_run\",\n        \"message_characters\": len(message),\n        \"message_preview\": message,\n        \"result\": asdict(result),\n    }\n    output_path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding=\"utf-8\")\n    return output_path\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\n",
+      "provider": "codex",
+      "model": null,
+      "reasoningEffort": null,
+      "createdAt": "2026-06-11T18:18:17.180Z"
+    }
+  ],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:18:17.180Z"
+}

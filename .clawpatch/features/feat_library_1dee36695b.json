@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_library_1dee36695b",
+  "title": "Python source scripts#3",
+  "summary": "Python source group scripts#3 with 3 files.",
+  "kind": "library",
+  "source": "python-source-group",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "scripts#3",
+      "symbol": "scripts#3",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "scripts/start_high_risk_slice.py",
+      "reason": "source group scripts#3"
+    },
+    {
+      "path": "scripts/submit_live_orders.py",
+      "reason": "source group scripts#3"
+    },
+    {
+      "path": "scripts/validate_research_preflight.py",
+      "reason": "source group scripts#3"
+    }
+  ],
+  "contextFiles": [],
+  "tests": [],
+  "tags": [
+    "python",
+    "source-group"
+  ],
+  "trustBoundaries": [],
+  "status": "error",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [
+    {
+      "runId": "20260611T181806-3977d2",
+      "kind": "review-error",
+      "summary": "codex provider failed: OpenAI Codex v0.121.0 (research preview)\n--------\nworkdir: C:\\Users\\AndyC\\projects\\TheSlowBrain\nmodel: gpt-5.5\nprovider: openai\napproval: never\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 019eb7e7-f327-73e2-8975-36a0a36d0cbd\n--------\nuser\nYou are reviewing one semantic feature for clawpatch.\n\nReturn strict JSON only. No markdown fences.\n\nProject:\n{\n  \"name\": \"TheSlowBrain\",\n  \"detected\": {\n    \"languages\": [\n      \"python\"\n    ],\n    \"frameworks\": [\n      \"pytest\"\n    ],\n    \"packageManagers\": [\n      \"uv\"\n    ],\n    \"commands\": {\n      \"typecheck\": \"uv run mypy .\",\n      \"lint\": \"uv run ruff check .\",\n      \"format\": \"uv run ruff format --check .\",\n      \"test\": \"uv run pytest\"\n    }\n  }\n}\n\nFeature:\n{\n  \"schemaVersion\": 1,\n  \"featureId\": \"feat_library_1dee36695b\",\n  \"title\": \"Python source scripts#3\",\n  \"summary\": \"Python source group scripts#3 with 3 files.\",\n  \"kind\": \"library\",\n  \"source\": \"python-source-group\",\n  \"confidence\": \"medium\",\n  \"entrypoints\": [\n    {\n      \"path\": \"scripts#3\",\n      \"symbol\": \"scripts#3\",\n      \"route\": null,\n      \"command\": null\n    }\n  ],\n  \"ownedFiles\": [\n    {\n      \"path\": \"scripts/start_high_risk_slice.py\",\n      \"reason\": \"source group scripts#3\"\n    },\n    {\n      \"path\": \"scripts/submit_live_orders.py\",\n      \"reason\": \"source group scripts#3\"\n    },\n    {\n      \"path\": \"scripts/validate_research_preflight.py\",\n      \"reason\": \"source group scripts#3\"\n    }\n  ],\n  \"contextFiles\": [],\n  \"tests\": [],\n  \"tags\": [\n    \"python\",\n    \"source-group\"\n  ],\n  \"trustBoundaries\": [],\n  \"status\": \"claimed\",\n  \"lock\": {\n    \"lockedByRunId\": \"20260611T181806-3977d2\",\n    \"lockedAt\": \"2026-06-11T18:18:06.871Z\",\n    \"hostname\": \"LAPTOP-QF26BVVL\",\n    \"pid\": 19716\n  },\n  \"findingIds\": [],\n  \"patchAttemptIds\": [],\n  \"analysisHistory\": [],\n  \"createdAt\": \"2026-06-11T18:14:29.296Z\",\n  \"updatedAt\": \"2026-06-11T18:18:06.889Z\"\n}\n\nReview categories:\n- correctness bugs\n- security issues\n- race/concurrency bugs\n- data loss/corruption\n- resource leaks\n- bad error handling\n- permission/auth gaps\n- API contract mismatches\n- missing/weak tests\n- release/build hazards\n- maintainability risks with concrete impact\n\n\n\nInspect owned files, context files, and linked tests. Treat included tests as first-class\nevidence of intended behavior. If tests contradict a suspected bug, either skip it or\ndowngrade confidence and explain the uncertainty. Avoid reporting behavior as a bug\nsolely because a helper name implies a broader contract. Deduplicate sibling/root-cause\nissues: when the same bug pattern appears in multiple owned files, emit one finding\nwith multiple evidence refs instead of separate one-off findings.\n\nAvoid speculative low-evidence findings. Evidence must point at included files.\n\nJSON shape:\n{\n  \"findings\": [\n    {\n      \"title\": \"string\",\n      \"category\": \"bug|security|performance|concurrency|api-contract|data-loss|test-gap|docs-gap|build-release|maintainability\",\n      \"severity\": \"critical|high|medium|low\",\n      \"confidence\": \"high|medium|low\",\n      \"evidence\": [{\"path\":\"string\",\"startLine\":1,\"endLine\":1,\"symbol\":null,\"quote\":null}],\n      \"reasoning\": \"string\",\n      \"reproduction\": null,\n      \"recommendation\": \"string\",\n      \"whyTestsDoNotAlreadyCoverThis\": \"string\",\n      \"suggestedRegressionTest\": \"string or null\",\n      \"minimumFixScope\": \"string\"\n    }\n  ],\n  \"inspected\": {\"files\":[\"string\"],\"symbols\":[\"string\"],\"notes\":[\"string\"]}\n}\n\nFiles:\n--- scripts/start_high_risk_slice.py\n\"\"\"Workflow gate for starting a high-risk sprint slice.\n\nThis validates the active research preflight and prints the next workflow\nsteps. It is intentionally a gatekeeper, not a planner.\n\"\"\"\n\nfrom __future__ import annotations\n\nimport importlib.util\nimport sys\nfrom collections.abc import Callable\nfrom pathlib import Path\nfrom typing import cast\n\nDEFAULT_PREFLIGHT = Path(\"docs/research/current_sprint_preflight.md\")\n\n\ndef _load_validate_preflight() -> Callable[[Path], list[str]]:\n    script\n...[trimmed]...\nedger_path=args.project_root / args.ledger,\n        execute=args.execute,\n        approval_token=args.approval_token,\n    )\n    out_path = args.project_root / args.out\n    write_json(out_path, result)\n    print(\"TheSlowBrain live execution submit complete.\")\n    print(f\"Status: {result.get('status')}\")\n    print(f\"Reason: {result.get('reason', 'none')}\")\n    print(f\"Orders attempted: {result.get('orders_attempted', 0)}\")\n    print(f\"Orders submitted: {str(result.get('orders_submitted')).lower()}\")\n    print(f\"Submission: {out_path}\")\n    if result.get(\"status\") == \"submitted\":\n        return 0\n    if not args.execute and result.get(\"reason\") == \"execute_flag_not_set\":\n        return 0\n    return 2\n\n\ndef _build_client(config: AppConfig, client_factory: ClientFactory | None) -> Trading212Gateway | None:\n    if not credentials_available(config):\n        return None\n    factory = client_factory or build_trading212_client\n    return factory(config)\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n\n\n--- scripts/validate_research_preflight.py\n\"\"\"Validate a sprint research preflight markdown file.\n\nThis is a workflow guard for high-risk sprint planning. It checks that the\nactive research file exists, has the required sections, and does not contain\nplaceholder or guesswork language.\n\"\"\"\n\nfrom __future__ import annotations\n\nimport sys\nfrom pathlib import Path\n\nREQUIRED_HEADINGS = [\n    \"## Sprint / Slice\",\n    \"## Scope\",\n    \"## Risk Level\",\n    \"## Third-Party Libraries / APIs\",\n    \"## GitHub Top-5 Findings\",\n    \"## Installed Source / Primary Source Findings\",\n    \"## Repo Prior Art\",\n    \"## Confirmed Interfaces\",\n    \"## Proof Obligations\",\n    \"## Safety / Rollback\",\n    \"## Safe To Start\",\n]\n\nFORBIDDEN_TOKENS = {\"TODO\", \"TBD\", \"<fill\", \"likely\", \"probably\", \"assumed\"}\n\n\ndef validate_preflight(path: Path) -> list[str]:\n    \"\"\"Return validation errors for a preflight markdown file.\"\"\"\n    if not path.exists():\n        return [f\"File does not exist: {path}\"]\n\n    text = path.read_text(encoding=\"utf-8\")\n    errors: list[str] = []\n\n    for heading in REQUIRED_HEADINGS:\n        if heading not in text:\n            errors.append(f\"Missing required heading: {heading}\")\n\n    for token in FORBIDDEN_TOKENS:\n        if token.lower() in text.lower():\n            errors.append(f\"Forbidden placeholder or guess token present: {token}\")\n\n    repo_lines = [line for line in text.splitlines() if line.startswith(\"- Repo \")]\n    if len(repo_lines) < 5:\n        errors.append(\"GitHub Top-5 Findings section must include five repo entries.\")\n\n    interface_lines = [line for line in text.splitlines() if line.startswith(\"- Interface:\")]\n    if len(interface_lines) < 2:\n        errors.append(\"Confirmed Interfaces section must list at least two concrete interfaces.\")\n\n    proof_lines = [line for line in text.splitlines() if line.startswith(\"- Done clause:\")]\n    if len(proof_lines) < 2:\n        errors.append(\"Proof Obligations section must list at least two done clauses.\")\n\n    return errors\n\n\ndef main(argv: list[str]) -> int:\n    \"\"\"CLI entrypoint.\"\"\"\n    if len(argv) != 2:\n        print(\n            \"Usage: python scripts/validate_research_preflight.py <preflight.md>\",\n            file=sys.stderr,\n        )\n        return 2\n\n    path = Path(argv[1])\n    errors = validate_preflight(path)\n    if errors:\n        print(f\"Research preflight invalid: {path}\")\n        for error in errors:\n            print(f\"- {error}\")\n        return 1\n\n    print(f\"Research preflight valid: {path}\")\n    return 0\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main(sys.argv))\n\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\n",
+      "provider": "codex",
+      "model": null,
+      "reasoningEffort": null,
+      "createdAt": "2026-06-11T18:18:16.618Z"
+    }
+  ],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:18:16.618Z"
+}

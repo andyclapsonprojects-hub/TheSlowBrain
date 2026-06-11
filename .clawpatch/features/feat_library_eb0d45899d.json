@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_library_eb0d45899d",
+  "title": "Python source src/slowbrain#3",
+  "summary": "Python source group src/slowbrain#3 with 12 files.",
+  "kind": "library",
+  "source": "python-source-group",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "src/slowbrain#3",
+      "symbol": "src/slowbrain#3",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "src/slowbrain/market_data_cache.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/microgix.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/models.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/numeric.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/optimizer.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/promotion.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/reporting.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/rubrics.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/shadow_runner.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/technical_context.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/telegram.py",
+      "reason": "source group src/slowbrain#3"
+    },
+    {
+      "path": "src/slowbrain/trading212.py",
+      "reason": "source group src/slowbrain#3"
+    }
+  ],
+  "contextFiles": [
+    {
+      "path": "tests/test_shadow_runner.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/test_technical_context.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/test_telegram.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/unit/test_numeric.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/unit/test_promotion.py",
+      "reason": "associated test"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/test_shadow_runner.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_technical_context.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_telegram.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/unit/test_numeric.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/unit/test_promotion.py",
+      "command": "uv run pytest"
+    }
+  ],
+  "tags": [
+    "python",
+    "source-group"
+  ],
+  "trustBoundaries": [],
+  "status": "pending",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:14:29.296Z"
+}

@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_library_2ed4d6e629",
+  "title": "Python source src/slowbrain#2",
+  "summary": "Python source group src/slowbrain#2 with 12 files.",
+  "kind": "library",
+  "source": "python-source-group",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "src/slowbrain#2",
+      "symbol": "src/slowbrain#2",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "src/slowbrain/gating_model.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/gating_training.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/grader_council.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/human_anchor.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/hypotheses.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/indicator_features.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/indicators.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/learning_state.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/legacy_price_cache.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/live_execution.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/live_execution_support.py",
+      "reason": "source group src/slowbrain#2"
+    },
+    {
+      "path": "src/slowbrain/market_data.py",
+      "reason": "source group src/slowbrain#2"
+    }
+  ],
+  "contextFiles": [
+    {
+      "path": "tests/test_indicator_features.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/test_indicators.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/test_legacy_price_cache.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/unit/test_gating_training.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/unit/test_learning_state.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/unit/test_live_execution.py",
+      "reason": "associated test"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/test_indicator_features.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_indicators.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_legacy_price_cache.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/unit/test_gating_training.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/unit/test_learning_state.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/unit/test_live_execution.py",
+      "command": "uv run pytest"
+    }
+  ],
+  "tags": [
+    "python",
+    "source-group"
+  ],
+  "trustBoundaries": [],
+  "status": "error",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [
+    {
+      "runId": "20260611T181806-3977d2",
+      "kind": "review-error",
+      "summary": "codex provider failed: 2026-06-11T18:18:07.913685Z ERROR codex_core_skills::manager: failed to install system skills: io error while remove existing system skills dir: Access is denied. (os error 5)\nOpenAI Codex v0.121.0 (research preview)\n--------\nworkdir: C:\\Users\\AndyC\\projects\\TheSlowBrain\nmodel: gpt-5.5\nprovider: openai\napproval: never\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 019eb7e7-f362-7701-8869-ba9c1f6fe6ef\n--------\nuser\nYou are reviewing one semantic feature for clawpatch.\n\nReturn strict JSON only. No markdown fences.\n\nProject:\n{\n  \"name\": \"TheSlowBrain\",\n  \"detected\": {\n    \"languages\": [\n      \"python\"\n    ],\n    \"frameworks\": [\n      \"pytest\"\n    ],\n    \"packageManagers\": [\n      \"uv\"\n    ],\n    \"commands\": {\n      \"typecheck\": \"uv run mypy .\",\n      \"lint\": \"uv run ruff check .\",\n      \"format\": \"uv run ruff format --check .\",\n      \"test\": \"uv run pytest\"\n    }\n  }\n}\n\nFeature:\n{\n  \"schemaVersion\": 1,\n  \"featureId\": \"feat_library_2ed4d6e629\",\n  \"title\": \"Python source src/slowbrain#2\",\n  \"summary\": \"Python source group src/slowbrain#2 with 12 files.\",\n  \"kind\": \"library\",\n  \"source\": \"python-source-group\",\n  \"confidence\": \"medium\",\n  \"entrypoints\": [\n    {\n      \"path\": \"src/slowbrain#2\",\n      \"symbol\": \"src/slowbrain#2\",\n      \"route\": null,\n      \"command\": null\n    }\n  ],\n  \"ownedFiles\": [\n    {\n      \"path\": \"src/slowbrain/gating_model.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/gating_training.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/grader_council.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/human_anchor.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/hypotheses.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/indicator_features.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/indicators.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/learning_state.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/legacy_price_cache.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/live_execution.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/live_execution_support.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    },\n    {\n      \"path\": \"src/slowbrain/market_data.py\",\n      \"reason\": \"source group src/slowbrain#2\"\n    }\n  ],\n  \"contextFiles\": [\n    {\n      \"path\": \"tests/test_indicator_features.py\",\n      \"reason\": \"associated test\"\n    },\n    {\n      \"path\": \"tests/test_indicators.py\",\n      \"reason\": \"associated test\"\n    },\n    {\n      \"path\": \"tests/test_legacy_price_cache.py\",\n      \"reason\": \"associated test\"\n    },\n    {\n      \"path\": \"tests/unit/test_gating_training.py\",\n      \"reason\": \"associated test\"\n    },\n    {\n      \"path\": \"tests/unit/test_learning_state.py\",\n      \"reason\": \"associated test\"\n    },\n    {\n      \"path\": \"tests/unit/test_live_execution.py\",\n      \"reason\": \"associated test\"\n    }\n  ],\n  \"tests\": [\n    {\n      \"path\": \"tests/test_indicator_features.py\",\n      \"command\": \"uv run pytest\"\n    },\n    {\n      \"path\": \"tests/test_indicators.py\",\n      \"command\": \"uv run pytest\"\n    },\n    {\n      \"path\": \"tests/test_legacy_price_cache.py\",\n      \"command\": \"uv run pytest\"\n    },\n    {\n      \"path\": \"tests/unit/test_gating_training.py\",\n      \"command\": \"uv run pytest\"\n    },\n    {\n      \"path\": \"tests/unit/test_learning_state.py\",\n      \"command\": \"uv run pytest\"\n    },\n    {\n      \"path\": \"tests/unit/test_live_execution.py\",\n      \"command\": \"uv run pytest\"\n    }\n  ],\n  \"tags\": [\n    \"python\",\n    \"source-group\"\n  ],\n  \"trustBoundaries\": [],\n  \"status\": \"claimed\",\n  \"lock\": {\n    \"lockedByRunId\": \"20260611T181806-\n...[trimmed]...\nayload = (\n            self._positions_payload\n            if self._positions_payload is not None\n            else cast(\"list[JsonValue]\", list(_positions()))\n        )\n        return Trading212Response(\"GET\", \"/equity/positions\", 200, cast(\"JsonValue\", payload), {})\n\n    def active_orders(self) -> Trading212Response:\n        payload = self._active_orders_payload if self._active_orders_payload is not None else []\n        return Trading212Response(\"GET\", \"/equity/orders\", 200, cast(\"JsonValue\", payload), {})\n\n    def history_orders(self, *, limit: int = 50) -> Trading212Response:\n        del limit\n        return Trading212Response(\"GET\", \"/equity/history/orders?limit=50\", 200, [{\"id\": \"broker-1\"}], {})\n\n    def place_market_order(self, *, ticker: str, quantity: float) -> Trading212Response:\n        self.market_orders.append((ticker, quantity))\n        return Trading212Response(\"POST\", \"/equity/orders/market\", 200, {\"id\": f\"broker-{len(self.market_orders)}\"}, {})\n\n\ndef _preview() -> dict[str, object]:\n    return build_execution_preview(\n        report_payload={\n            \"trade_decisions\": [\n                {\"ticker\": \"AVGO\", \"action\": \"BUY\", \"score\": 0.95, \"rubric_version\": \"fixture\"},\n                {\"ticker\": \"ADSK\", \"action\": \"SELL\", \"score\": -0.5, \"rubric_version\": \"fixture\"},\n                {\"ticker\": \"MSFT\", \"action\": \"SELL\", \"score\": -0.5, \"rubric_version\": \"fixture\"},\n                {\"ticker\": \"HOLDME\", \"action\": \"HOLD\", \"score\": 0.1, \"rubric_version\": \"fixture\"},\n            ]\n        },\n        config=_config(),\n        instruments=_instruments(),\n        positions=_positions(),\n        active_orders=(),\n        price_lookup=lambda _symbol, _currency: PriceSnapshot(20.0, \"fixture_price\", \"2026-06-02\"),\n        now=_now(),\n    )\n\n\ndef _instruments() -> tuple[dict[str, object], ...]:\n    return (\n        {\"ticker\": \"AVGO_US_EQ\", \"shortName\": \"AVGO\", \"currencyCode\": \"USD\", \"type\": \"STOCK\"},\n        {\"ticker\": \"ADSK_US_EQ\", \"shortName\": \"ADSK\", \"currencyCode\": \"USD\", \"type\": \"STOCK\"},\n        {\"ticker\": \"MSFT_US_EQ\", \"shortName\": \"MSFT\", \"currencyCode\": \"USD\", \"type\": \"STOCK\"},\n    )\n\n\ndef _positions() -> tuple[dict[str, object], ...]:\n    return (\n        {\n            \"instrument\": {\"ticker\": \"ADSK_US_EQ\"},\n            \"quantityAvailableForTrading\": 2.5,\n            \"currentPrice\": 100.0,\n            \"createdAt\": \"2026-06-02T08:00:00Z\",\n        },\n    )\n\n\ndef _config(\n    *,\n    api: bool = True,\n    live: bool = False,\n    max_daily_orders: int | None = 5,\n    max_order_value: float | None = 500.0,\n) -> AppConfig:\n    return AppConfig(\n        legacy_stock_project_root=Path(\"legacy\"),\n        alpha_vantage_api_key=None,\n        finnhub_api_key=None,\n        openai_api_key=None,\n        openai_model=None,\n        trading212_api_key=\"key\" if api else None,\n        trading212_api_secret=\"secret\" if api else None,\n        trading212_env=\"demo\",\n        trading_live_enabled=live,\n        trading_require_manual_approval=True,\n        trading_max_daily_orders=max_daily_orders,\n        trading_max_order_value=max_order_value,\n        telegram_bot_token=None,\n        telegram_chat_id=None,\n        telegram_message_thread_id=None,\n        market_data_enabled=False,\n        market_data_cache_dir=None,\n        market_data_usd_gbp_rate=0.8,\n    )\n\n\ndef _now() -> datetime:\n    return datetime(2026, 6, 2, 10, 0, tzinfo=UTC)\n\n\ndef _orders(preview: dict[str, object]) -> list[dict[str, object]]:\n    orders = preview[\"orders\"]\n    assert isinstance(orders, list)\n    assert all(isinstance(order, dict) for order in orders)\n    return orders\n\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\n",
+      "provider": "codex",
+      "model": null,
+      "reasoningEffort": null,
+      "createdAt": "2026-06-11T18:18:17.216Z"
+    }
+  ],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:18:17.216Z"
+}

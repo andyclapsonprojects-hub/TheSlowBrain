@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_test-suite_2755852c9c",
+  "title": "Python test suite tests#1",
+  "summary": "Python pytest files in tests#1.",
+  "kind": "test-suite",
+  "source": "python-test-suite",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "tests#1",
+      "symbol": "tests#1",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "tests/test_accounting_cio.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_backtest_optimizer.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_data_import.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_data_quality.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_eval_council.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_human_labeling.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_indicator_features.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_indicators.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_legacy_price_cache.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_pr12_real_features.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_pr2_edge_cases.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_pr4_review2_remediation.py",
+      "reason": "pytest file"
+    }
+  ],
+  "contextFiles": [
+    {
+      "path": "tests/test_accounting_cio.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_backtest_optimizer.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_data_import.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_data_quality.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_eval_council.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_human_labeling.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_indicator_features.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_indicators.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_legacy_price_cache.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_pr12_real_features.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_pr2_edge_cases.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_pr4_review2_remediation.py",
+      "reason": "nearby test"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/test_accounting_cio.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_backtest_optimizer.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_data_import.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_data_quality.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_eval_council.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_human_labeling.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_indicator_features.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_indicators.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_legacy_price_cache.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_pr12_real_features.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_pr2_edge_cases.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_pr4_review2_remediation.py",
+      "command": "uv run pytest"
+    }
+  ],
+  "tags": [
+    "python",
+    "test"
+  ],
+  "trustBoundaries": [],
+  "status": "pending",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:14:29.296Z"
+}

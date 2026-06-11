@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "projectId": "prj_https-github-com-andyclapsonproj_4ac4cc0aab",
+  "name": "TheSlowBrain",
+  "rootPath": "C:/Users/AndyC/projects/TheSlowBrain",
+  "git": {
+    "remoteUrl": "https://github.com/andyclapsonprojects-hub/TheSlowBrain.git",
+    "defaultBranch": "main",
+    "currentBranch": "main",
+    "headSha": "2e14577994ce54fe61a8a9eb4d99ab0c81d49138"
+  },
+  "detected": {
+    "languages": [
+      "python"
+    ],
+    "frameworks": [
+      "pytest"
+    ],
+    "packageManagers": [
+      "uv"
+    ],
+    "commands": {
+      "typecheck": "uv run mypy .",
+      "lint": "uv run ruff check .",
+      "format": "uv run ruff format --check .",
+      "test": "uv run pytest"
+    }
+  },
+  "createdAt": "2026-06-11T18:14:16.545Z",
+  "updatedAt": "2026-06-11T18:14:16.545Z"
+}

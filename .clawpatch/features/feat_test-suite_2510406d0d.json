@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_test-suite_2510406d0d",
+  "title": "Python test suite tests/integration",
+  "summary": "Python pytest files in tests/integration.",
+  "kind": "test-suite",
+  "source": "python-test-suite",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "tests/integration",
+      "symbol": "tests/integration",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "tests/integration/test_gate_promotion.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/integration/test_project_structure.py",
+      "reason": "pytest file"
+    }
+  ],
+  "contextFiles": [
+    {
+      "path": "tests/integration/test_gate_promotion.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/integration/test_project_structure.py",
+      "reason": "nearby test"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/integration/test_gate_promotion.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/integration/test_project_structure.py",
+      "command": "uv run pytest"
+    }
+  ],
+  "tags": [
+    "python",
+    "test"
+  ],
+  "trustBoundaries": [],
+  "status": "pending",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:14:29.296Z"
+}

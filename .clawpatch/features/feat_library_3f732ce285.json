@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_library_3f732ce285",
+  "title": "Python source src/slowbrain#1",
+  "summary": "Python source group src/slowbrain#1 with 12 files.",
+  "kind": "library",
+  "source": "python-source-group",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "src/slowbrain#1",
+      "symbol": "src/slowbrain#1",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "src/slowbrain/__init__.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/accounting.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/cio.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/config.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/costs.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/data_import.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/data_quality.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/decision_capture.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/enrichment.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/eval_council.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/features.py",
+      "reason": "source group src/slowbrain#1"
+    },
+    {
+      "path": "src/slowbrain/gating_apply.py",
+      "reason": "source group src/slowbrain#1"
+    }
+  ],
+  "contextFiles": [
+    {
+      "path": "tests/test_data_import.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/test_data_quality.py",
+      "reason": "associated test"
+    },
+    {
+      "path": "tests/test_eval_council.py",
+      "reason": "associated test"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/test_data_import.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_data_quality.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_eval_council.py",
+      "command": "uv run pytest"
+    }
+  ],
+  "tags": [
+    "python",
+    "source-group"
+  ],
+  "trustBoundaries": [],
+  "status": "error",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [
+    {
+      "runId": "20260611T181806-3977d2",
+      "kind": "review-error",
+      "summary": "codex provider failed: OpenAI Codex v0.121.0 (research preview)\n--------\nworkdir: C:\\Users\\AndyC\\projects\\TheSlowBrain\nmodel: gpt-5.5\nprovider: openai\napproval: never\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 019eb7e7-f34d-70b2-885d-45fccd7caf61\n--------\nuser\nYou are reviewing one semantic feature for clawpatch.\n\nReturn strict JSON only. No markdown fences.\n\nProject:\n{\n  \"name\": \"TheSlowBrain\",\n  \"detected\": {\n    \"languages\": [\n      \"python\"\n    ],\n    \"frameworks\": [\n      \"pytest\"\n    ],\n    \"packageManagers\": [\n      \"uv\"\n    ],\n    \"commands\": {\n      \"typecheck\": \"uv run mypy .\",\n      \"lint\": \"uv run ruff check .\",\n      \"format\": \"uv run ruff format --check .\",\n      \"test\": \"uv run pytest\"\n    }\n  }\n}\n\nFeature:\n{\n  \"schemaVersion\": 1,\n  \"featureId\": \"feat_library_3f732ce285\",\n  \"title\": \"Python source src/slowbrain#1\",\n  \"summary\": \"Python source group src/slowbrain#1 with 12 files.\",\n  \"kind\": \"library\",\n  \"source\": \"python-source-group\",\n  \"confidence\": \"medium\",\n  \"entrypoints\": [\n    {\n      \"path\": \"src/slowbrain#1\",\n      \"symbol\": \"src/slowbrain#1\",\n      \"route\": null,\n      \"command\": null\n    }\n  ],\n  \"ownedFiles\": [\n    {\n      \"path\": \"src/slowbrain/__init__.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/accounting.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/cio.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/config.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/costs.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/data_import.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/data_quality.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/decision_capture.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/enrichment.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/eval_council.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/features.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    },\n    {\n      \"path\": \"src/slowbrain/gating_apply.py\",\n      \"reason\": \"source group src/slowbrain#1\"\n    }\n  ],\n  \"contextFiles\": [\n    {\n      \"path\": \"tests/test_data_import.py\",\n      \"reason\": \"associated test\"\n    },\n    {\n      \"path\": \"tests/test_data_quality.py\",\n      \"reason\": \"associated test\"\n    },\n    {\n      \"path\": \"tests/test_eval_council.py\",\n      \"reason\": \"associated test\"\n    }\n  ],\n  \"tests\": [\n    {\n      \"path\": \"tests/test_data_import.py\",\n      \"command\": \"uv run pytest\"\n    },\n    {\n      \"path\": \"tests/test_data_quality.py\",\n      \"command\": \"uv run pytest\"\n    },\n    {\n      \"path\": \"tests/test_eval_council.py\",\n      \"command\": \"uv run pytest\"\n    }\n  ],\n  \"tags\": [\n    \"python\",\n    \"source-group\"\n  ],\n  \"trustBoundaries\": [],\n  \"status\": \"claimed\",\n  \"lock\": {\n    \"lockedByRunId\": \"20260611T181806-3977d2\",\n    \"lockedAt\": \"2026-06-11T18:18:06.876Z\",\n    \"hostname\": \"LAPTOP-QF26BVVL\",\n    \"pid\": 19716\n  },\n  \"findingIds\": [],\n  \"patchAttemptIds\": [],\n  \"analysisHistory\": [],\n  \"createdAt\": \"2026-06-11T18:14:29.296Z\",\n  \"updatedAt\": \"2026-06-11T18:18:06.890Z\"\n}\n\nReview categories:\n- correctness bugs\n- security issues\n- race/concurrency bugs\n- data loss/corruption\n- resource leaks\n- bad error handling\n- permission/auth gaps\n- API contract mismatches\n- missing/weak tests\n- release/build hazards\n- maintainability risks with concrete impact\n\n\n\nInspect owned files, context files, and linked tests. Treat included tests as first-class\nevidence of intended behavior. If tests contradict a suspected bug, either skip it or\ndowngrade confidence and explain the uncertainty. Avoid reporting behavior as a bug\nsolely because a helper name im\n...[trimmed]...\nd return.\n    otlk = check_outcome_plausibility(close_price=0.233, forward_return_pct=212.85)\n    healthy = check_outcome_plausibility(close_price=68.03, forward_return_pct=10.85)\n    big_move_normal_price = check_outcome_plausibility(close_price=25.0, forward_return_pct=80.0)\n    missing = check_outcome_plausibility(close_price=None, forward_return_pct=212.85)\n\n    assert otlk is not None\n    assert otlk.severity == \"error\"\n    assert otlk.code == \"implausible_outcome_for_penny_stock\"\n    # A normal-priced stock with a big move is NOT auto-flagged by this rule.\n    assert healthy is None\n    assert big_move_normal_price is None\n    assert missing is None\n\n\n--- tests/test_eval_council.py\nfrom __future__ import annotations\n\nfrom pathlib import Path\n\nfrom slowbrain.eval_council import (\n    HumanExample,\n    JudgeVote,\n    calibrate_against_humans,\n    load_human_examples_from_decision_capture,\n    load_human_examples_from_labeling_csv,\n    open_code_failures,\n    review_decision,\n)\n\n\ndef test_human_examples_are_required_before_calibration_claim() -> None:\n    report = calibrate_against_humans((), {})\n\n    assert report.status == \"not_available\"\n    assert report.human_examples_required\n    assert report.kappa is None\n\n\ndef test_calibration_computes_kappa_when_examples_exist() -> None:\n    examples = (\n        HumanExample(\"one\", \"AAPL\", \"2026-01-01\", \"BUY\", \"good setup\"),\n        HumanExample(\"two\", \"MSFT\", \"2026-01-02\", \"HOLD\", \"unclear setup\"),\n    )\n\n    report = calibrate_against_humans(examples, {\"one\": \"BUY\", \"two\": \"HOLD\"})\n\n    assert report.status == \"calibrated\"\n    assert report.kappa == 1.0\n\n\ndef test_calibration_fails_below_required_kappa() -> None:\n    examples = (\n        HumanExample(\"one\", \"AAPL\", \"2026-01-01\", \"BUY\", \"good setup\"),\n        HumanExample(\"two\", \"MSFT\", \"2026-01-02\", \"HOLD\", \"unclear setup\"),\n    )\n\n    report = calibrate_against_humans(examples, {\"one\": \"HOLD\", \"two\": \"BUY\"})\n\n    assert report.status == \"failed\"\n    assert report.human_examples_required\n    assert report.kappa is not None and report.kappa < 0.80\n\n\ndef test_human_examples_load_from_labelled_decision_capture(tmp_path: Path) -> None:\n    path = tmp_path / \"capture.jsonl\"\n    path.write_text(\n        '{\"run_id\":\"run\",\"feature\":{\"idea_id\":\"one\",\"ticker\":\"AAPL\",\"signal_date\":\"2026-01-01\"},'\n        '\"human_label\":\"BUY\",\"human_rationale\":\"fixture\"}\\n'\n        '{\"run_id\":\"run\",\"feature\":{\"idea_id\":\"two\",\"ticker\":\"MSFT\",\"signal_date\":\"2026-01-02\"},'\n        '\"human_label\":null,\"human_rationale\":null}\\n',\n        encoding=\"utf-8\",\n    )\n\n    examples = load_human_examples_from_decision_capture(path)\n\n    assert examples == (HumanExample(\"one\", \"AAPL\", \"2026-01-01\", \"BUY\", \"fixture\"),)\n\n\ndef test_human_examples_load_from_labeling_csv(tmp_path: Path) -> None:\n    path = tmp_path / \"labels.csv\"\n    path.write_text(\n        \"example_id,ticker,signal_date,human_label,human_rationale\\n\"\n        \"one,AAPL,2026-01-01,BUY,clear setup\\n\"\n        \"two,MSFT,2026-01-02,,blank ignored\\n\",\n        encoding=\"utf-8\",\n    )\n\n    examples = load_human_examples_from_labeling_csv(path)\n\n    assert examples == (HumanExample(\"one\", \"AAPL\", \"2026-01-01\", \"BUY\", \"clear setup\"),)\n\n\ndef test_council_unknown_output_blocks_aggregate_pass() -> None:\n    review = review_decision(\n        \"decision-1\",\n        (\n            JudgeVote(\"profit_evidence\", \"pass\", \"profitable\"),\n            JudgeVote(\"data_quality\", \"unknown\", \"missing human example\"),\n        ),\n    )\n\n    assert review.aggregate_outcome == \"unknown\"\n    assert open_code_failures((review,)) == (\"data_quality\",)\n\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\n",
+      "provider": "codex",
+      "model": null,
+      "reasoningEffort": null,
+      "createdAt": "2026-06-11T18:18:17.477Z"
+    }
+  ],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:18:17.477Z"
+}

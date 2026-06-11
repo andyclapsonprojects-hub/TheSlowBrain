@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_test-suite_989af37b07",
+  "title": "Python test suite tests#2",
+  "summary": "Python pytest files in tests#2.",
+  "kind": "test-suite",
+  "source": "python-test-suite",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "tests#2",
+      "symbol": "tests#2",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "tests/test_pr5_review3_work_order.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_pr6_market_data.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_pr7_rich_labels.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_pr8_mega_sprint.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_pr9_gating_model.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_quality_review.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_shadow_runner.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_slowbrain_core.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_technical_context.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_telegram.py",
+      "reason": "pytest file"
+    },
+    {
+      "path": "tests/test_workflow.py",
+      "reason": "pytest file"
+    }
+  ],
+  "contextFiles": [
+    {
+      "path": "tests/test_pr5_review3_work_order.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_pr6_market_data.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_pr7_rich_labels.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_pr8_mega_sprint.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_pr9_gating_model.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_quality_review.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_shadow_runner.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_slowbrain_core.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_technical_context.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_telegram.py",
+      "reason": "nearby test"
+    },
+    {
+      "path": "tests/test_workflow.py",
+      "reason": "nearby test"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/test_pr5_review3_work_order.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_pr6_market_data.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_pr7_rich_labels.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_pr8_mega_sprint.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_pr9_gating_model.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_quality_review.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_shadow_runner.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_slowbrain_core.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_technical_context.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_telegram.py",
+      "command": "uv run pytest"
+    },
+    {
+      "path": "tests/test_workflow.py",
+      "command": "uv run pytest"
+    }
+  ],
+  "tags": [
+    "python",
+    "test"
+  ],
+  "trustBoundaries": [],
+  "status": "pending",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:14:29.296Z"
+}

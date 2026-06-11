@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neural Networks & Our Findings — Zero to Hero</title>
+<style>
+  :root{
+    --bg:#0b1020; --panel:#141b33; --panel2:#1b2444; --ink:#eaf0ff; --muted:#9fb0d8;
+    --indigo:#6c5ce7; --violet:#a55eea; --teal:#1dd1a1; --cyan:#48dbfb; --amber:#feca57;
+    --red:#ff6b6b; --green:#1dd1a1; --line:#2a3566;
+    --grad:linear-gradient(135deg,#6c5ce7,#a55eea 50%,#48dbfb);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#1a2347,transparent),var(--bg);
+    color:var(--ink);font:16px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  .progress{position:fixed;top:0;left:0;height:4px;width:0;background:var(--grad);z-index:50;transition:width .1s}
+  nav{position:sticky;top:0;z-index:40;background:rgba(11,16,32,.82);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  nav a{color:var(--muted);text-decoration:none;font-size:13px;padding:5px 10px;border-radius:8px;white-space:nowrap}
+  nav a:hover{color:var(--ink);background:var(--panel2)}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
+  header.hero{padding:80px 20px 50px;text-align:center}
+  .hero h1{font-size:clamp(30px,6vw,54px);margin:0;line-height:1.1;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+  .hero p{color:var(--muted);max-width:640px;margin:18px auto 0;font-size:18px}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--muted)}
+  section{padding:46px 0;border-top:1px solid var(--line)}
+  .tag{display:inline-block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);font-weight:700}
+  h2{font-size:clamp(24px,4vw,34px);margin:6px 0 14px}
+  h3{font-size:20px;margin:26px 0 8px;color:#dbe5ff}
+  p{color:#d2dcfb}
+  .muted{color:var(--muted)}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+    border-radius:18px;padding:22px 24px;margin:16px 0;box-shadow:0 20px 50px -30px #000}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+  .center{text-align:center}
+  svg{max-width:100%;height:auto;display:block;margin:0 auto}
+  .node{fill:var(--panel2);stroke:var(--indigo);stroke-width:2}
+  .node.in{stroke:var(--cyan)} .node.hid{stroke:var(--violet)} .node.out{stroke:var(--teal)}
+  .wire{stroke:#39477f;stroke-width:1.2;opacity:.55}
+  .wire.hot{stroke:var(--amber);stroke-width:2.4;opacity:1}
+  .nlab{fill:var(--ink);font-size:12px;font-weight:600}
+  .slab{fill:var(--muted);font-size:11px}
+  .bar-row{display:grid;grid-template-columns:128px 1fr 70px;align-items:center;gap:10px;margin:7px 0;font-size:14px}
+  .bar-track{background:#0e1530;border-radius:8px;height:22px;position:relative;overflow:hidden}
+  .bar{height:100%;border-radius:8px}
+  .bar.g{background:linear-gradient(90deg,#0e8c6f,var(--green))}
+  .bar.r{background:linear-gradient(90deg,#b13b3b,var(--red))}
+  .bar.b{background:linear-gradient(90deg,#3a59c7,var(--cyan))}
+  .val{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .verdict{display:flex;gap:14px;align-items:center;padding:14px 18px;border-radius:14px;margin:12px 0;border:1px solid var(--line)}
+  .verdict .ic{font-size:26px}
+  .good{background:linear-gradient(90deg,rgba(29,209,161,.14),transparent);border-color:#1c6b58}
+  .bad{background:linear-gradient(90deg,rgba(255,107,107,.13),transparent);border-color:#7a3a3a}
+  .warn{background:linear-gradient(90deg,rgba(254,202,87,.13),transparent);border-color:#7a6a30}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}
+  th{color:var(--cyan);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  .pos{color:var(--green)} .neg{color:var(--red)}
+  .step{display:flex;gap:16px;margin:14px 0}
+  .step .num{flex:0 0 38px;height:38px;border-radius:10px;background:var(--grad);display:flex;align-items:center;
+    justify-content:center;font-weight:800;color:#0b1020}
+  .callout{border-left:4px solid var(--violet);padding:8px 16px;margin:16px 0;background:rgba(165,94,234,.08);border-radius:0 12px 12px 0}
+  .kbd{background:#0e1530;border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-family:ui-monospace,monospace;font-size:13px}
+  footer{padding:50px 20px;text-align:center;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+  .big{font-size:34px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<nav>
+  <a href="#start">Start</a>
+  <a href="#simple">1 · Simple net</a>
+  <a href="#hidden">2 · Hidden layer</a>
+  <a href="#learn">3 · How it learns</a>
+  <a href="#proof">4 · Proof (XOR)</a>
+  <a href="#gate">5 · Our gate</a>
+  <a href="#hunt">6 · The hunt</a>
+  <a href="#edge">7 · The edge</a>
+  <a href="#risk">8 · Risk mgmt</a>
+  <a href="#verdict">9 · Verdict</a>
+</nav>
+
+<header class="hero" id="start">
+  <h1>Neural Networks &amp; What We Found</h1>
+  <p>A zero-to-hero, picture-first tour: how the network actually works, and the honest results of hunting for a tradeable edge in the market.</p>
+  <div class="chips">
+    <span class="chip">🧠 No maths background needed</span>
+    <span class="chip">📊 Real experiments</span>
+    <span class="chip">🔍 Honest results</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ============ PART A: THE NETWORK ============ -->
+<section id="part-a">
+  <span class="tag">Part A · How the brain works</span>
+  <h2>First, what <em>is</em> a neural network?</h2>
+  <p>Forget the sci-fi. It's a <strong>voting machine</strong>. You feed in facts about a stock today; it adds up weighted votes; it announces a verdict. That's the whole idea — everything else is detail.</p>
+  <div class="card center">
+    <div class="big">facts&nbsp; → &nbsp;weighted votes&nbsp; → &nbsp;verdict</div>
+    <p class="muted">RSI, momentum, volume…&nbsp;&nbsp;→&nbsp;&nbsp;each fact pushes for/against each answer&nbsp;&nbsp;→&nbsp;&nbsp;BUY / SELL / HOLD</p>
+  </div>
+</section>
+
+<section id="simple">
+  <span class="tag">Level 1</span>
+  <h2>The simple network (no hidden layer)</h2>
+  <p>Two rows of <strong>nodes</strong> (a node just holds a number). <strong>Inputs</strong> on the left (the facts), <strong>outputs</strong> on the right (the verdicts). Every input connects to every output by a <strong>wire</strong>, and each wire has a <strong>weight</strong> — how strongly that fact votes for that verdict.</p>
+  <div class="card">
+    <svg viewBox="0 0 440 240" role="img" aria-label="Simple network: 3 inputs fully connected to 3 outputs">
+      <!-- wires -->
+      <g>
+        <line class="wire hot" x1="92" y1="60" x2="348" y2="60"/>
+        <line class="wire" x1="92" y1="60" x2="348" y2="120"/>
+        <line class="wire" x1="92" y1="60" x2="348" y2="180"/>
+        <line class="wire hot" x1="92" y1="120" x2="348" y2="60"/>
+        <line class="wire" x1="92" y1="120" x2="348" y2="120"/>
+        <line class="wire" x1="92" y1="120" x2="348" y2="180"/>
+        <line class="wire hot" x1="92" y1="180" x2="348" y2="60"/>
+        <line class="wire" x1="92" y1="180" x2="348" y2="120"/>
+        <line class="wire" x1="92" y1="180" x2="348" y2="180"/>
+      </g>
+      <!-- inputs -->
+      <g><circle class="node in" cx="70" cy="60" r="22"/><text class="nlab" x="70" y="64" text-anchor="middle">RSI</text></g>
+      <g><circle class="node in" cx="70" cy="120" r="22"/><text class="nlab" x="70" y="124" text-anchor="middle">Mom</text></g>
+      <g><circle class="node in" cx="70" cy="180" r="22"/><text class="nlab" x="70" y="184" text-anchor="middle">Vol</text></g>
+      <!-- outputs -->
+      <g><circle class="node out" cx="370" cy="60" r="24"/><text class="nlab" x="370" y="64" text-anchor="middle">BUY</text></g>
+      <g><circle class="node out" cx="370" cy="120" r="24"/><text class="nlab" x="370" y="124" text-anchor="middle">HOLD</text></g>
+      <g><circle class="node out" cx="370" cy="180" r="24"/><text class="nlab" x="370" y="184" text-anchor="middle">SELL</text></g>
+      <text class="slab" x="70" y="218" text-anchor="middle">inputs (facts)</text>
+      <text class="slab" x="370" y="222" text-anchor="middle">outputs (verdicts)</text>
+    </svg>
+    <p class="muted center">Yellow = the wires feeding the <strong>BUY</strong> node. It adds up <span class="kbd">fact × weight</span> for every input, plus a bias.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>The maths is just adding up</h3>
+      <p>Each output = <span class="kbd">(fact₁×w₁) + (fact₂×w₂) + … + bias</span>. Big positive weight = "this fact strongly votes for me". Negative = "votes against".</p>
+    </div>
+    <div class="card">
+      <h3>Softmax → a decision</h3>
+      <p>A final step turns the raw scores into <strong>percentages</strong> that add to 100% — e.g. BUY&nbsp;80%, HOLD&nbsp;15%, SELL&nbsp;5% — and the machine picks the biggest. Done.</p>
+    </div>
+  </div>
+  <div class="callout">⚠️ The limit: a simple net can only learn <em>flat</em> rules like "more RSI → more BUY". It can't learn "low RSI is good <strong>only if</strong> the trend is also up". For that, you need…</div>
+</section>
+
+<section id="hidden">
+  <span class="tag">Level 2</span>
+  <h2>Adding a brain: the hidden layer</h2>
+  <p>Slip a middle row of nodes in between — the <strong>hidden layer</strong>. Each middle node is a <strong>scout</strong>: it watches all the facts and "lights up" only for a specific pattern. Training teaches each scout what to specialise in.</p>
+  <div class="card">
+    <svg viewBox="0 0 540 280" role="img" aria-label="Network with a hidden layer of scouts">
+      <g>
+        <!-- inputs to hidden -->
+        <line class="wire" x1="72" y1="70" x2="248" y2="50"/><line class="wire hot" x1="72" y1="70" x2="248" y2="120"/>
+        <line class="wire" x1="72" y1="70" x2="248" y2="190"/><line class="wire" x1="72" y1="70" x2="248" y2="240"/>
+        <line class="wire" x1="72" y1="140" x2="248" y2="50"/><line class="wire hot" x1="72" y1="140" x2="248" y2="120"/>
+        <line class="wire" x1="72" y1="140" x2="248" y2="190"/><line class="wire" x1="72" y1="140" x2="248" y2="240"/>
+        <line class="wire" x1="72" y1="210" x2="248" y2="50"/><line class="wire hot" x1="72" y1="210" x2="248" y2="120"/>
+        <line class="wire" x1="72" y1="210" x2="248" y2="190"/><line class="wire" x1="72" y1="210" x2="248" y2="240"/>
+        <!-- hidden to outputs -->
+        <line class="wire" x1="292" y1="50" x2="468" y2="100"/><line class="wire" x1="292" y1="50" x2="468" y2="190"/>
+        <line class="wire hot" x1="292" y1="120" x2="468" y2="100"/><line class="wire" x1="292" y1="120" x2="468" y2="190"/>
+        <line class="wire" x1="292" y1="190" x2="468" y2="100"/><line class="wire" x1="292" y1="190" x2="468" y2="190"/>
+        <line class="wire" x1="292" y1="240" x2="468" y2="100"/><line class="wire" x1="292" y1="240" x2="468" y2="190"/>
+      </g>
+      <!-- inputs -->
+      <g><circle class="node in" cx="50" cy="70" r="20"/><text class="nlab" x="50" y="74" text-anchor="middle">Vol</text></g>
+      <g><circle class="node in" cx="50" cy="140" r="20"/><text class="nlab" x="50" y="144" text-anchor="middle">RSI</text></g>
+      <g><circle class="node in" cx="50" cy="210" r="20"/><text class="nlab" x="50" y="214" text-anchor="middle">Trend</text></g>
+      <!-- hidden -->
+      <g><circle class="node hid" cx="270" cy="50" r="20"/></g>
+      <g><circle class="node hid" cx="270" cy="120" r="22"/><text class="slab" x="270" y="124" text-anchor="middle">scout</text></g>
+      <g><circle class="node hid" cx="270" cy="190" r="20"/></g>
+      <g><circle class="node hid" cx="270" cy="240" r="20"/></g>
+      <!-- outputs -->
+      <g><circle class="node out" cx="490" cy="100" r="22"/><text class="nlab" x="490" y="104" text-anchor="middle">BUY</text></g>
+      <g><circle class="node out" cx="490" cy="190" r="22"/><text class="nlab" x="490" y="194" text-anchor="middle">SELL</text></g>
+      <text class="slab" x="50" y="252" text-anchor="middle">facts</text>
+      <text class="slab" x="270" y="282" text-anchor="middle">hidden "scouts" (pattern detectors)</text>
+      <text class="slab" x="490" y="232" text-anchor="middle">verdicts</text>
+    </svg>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>🔦 Scout A learns…</h3><p>"RSI is low <strong>AND</strong> trend is up" → an <em>oversold-dip-in-an-uptrend</em> detector. (That's literally the pullback we tested!)</p></div>
+    <div class="card"><h3>🔦 Scout B learns…</h3><p>"Volume was heavy <strong>AND</strong> is now fading" → a <em>selling-exhaustion</em> detector.</p></div>
+  </div>
+  <p>The verdicts then vote on the <strong>scouts' reports</strong> instead of raw facts. The "lighting up" step (a function called <span class="kbd">ReLU</span> or <span class="kbd">tanh</span>) is the secret — without it, stacking layers collapses back to a simple net. Stack <em>more</em> hidden layers and you get <strong>deep</strong> learning: patterns-of-patterns.</p>
+</section>
+
+<section id="learn">
+  <span class="tag">Level 3</span>
+  <h2>How it learns: downhill &amp; blame</h2>
+  <p>Training = nudging all the wire-numbers until the verdicts match what actually made money. Two ideas:</p>
+  <div class="step"><div class="num">1</div><div><h3 style="margin-top:4px">Measure how wrong it is</h3><p>One number — the <strong>error</strong>. Truth was "BUY" but it said BUY 30%? Big error. Said BUY 90%? Small error.</p></div></div>
+  <div class="step"><div class="num">2</div><div><h3 style="margin-top:4px">Walk downhill (gradient descent)</h3><p>Picture every wire-setting as a spot on a landscape where height = how wrong you are. Feel which way is downhill and take a small step. Repeat thousands of times → you slide into a valley of low error.</p></div></div>
+  <div class="step"><div class="num">3</div><div><h3 style="margin-top:4px">Pass the blame back (backpropagation)</h3><p>The output was wrong — so ask each scout "how much was your fault?", then each wire feeding it, all the way back to the inputs. Each wire then knows which way to nudge. That backward blame-trace <em>is</em> backprop.</p></div></div>
+  <div class="callout">📁 In our code this engine is <span class="kbd">microgix.py</span> — every number remembers how it was built, so <span class="kbd">.backward()</span> can trace the blame. You built a tiny copy of it yourself in <span class="kbd">learn/tiny_nn.py</span>.</div>
+</section>
+
+<section id="proof">
+  <span class="tag">Level 4 · Proof</span>
+  <h2>Watch the hidden layer earn its keep</h2>
+  <p>We trained two nets on <strong>XOR</strong> ("answer YES when the two inputs differ") — a pattern a flat net <em>cannot</em> solve. Same data, 200 rounds of training each:</p>
+  <div class="grid2">
+    <div class="card bad"><h3>Flat net (no hidden layer)</h3>
+      <div class="big neg">stuck at 4.0</div>
+      <p class="muted">Error never drops. It shrugs (~0) at every example — a straight line literally can't split XOR.</p>
+    </div>
+    <div class="card good"><h3>Net + hidden layer</h3>
+      <div class="big pos">falls to 0.015</div>
+      <p class="muted">The scouts discover the "this-OR-that-but-not-both" combo on their own. It learns it.</p>
+    </div>
+  </div>
+  <p class="center muted">That gap is the entire reason hidden layers exist — <strong>when the pattern is real and nonlinear.</strong> Hold that thought.</p>
+</section>
+
+<section id="gate">
+  <span class="tag">Level 5</span>
+  <h2>Our actual trading network</h2>
+  <p>It's exactly the picture above, just bigger: <strong>32 input nodes → 5 verdicts</strong> (BUY / SELL / HOLD / AVOID / WATCHLIST), about <strong>165 weights</strong> in total. In code: <span class="kbd">LogisticGate</span> in <span class="kbd">gating_model.py</span>, trained by <span class="kbd">train_gate</span>.</p>
+  <div class="card grid2">
+    <div><h3>The 32 facts it sees</h3><p class="muted">RSI, MACD, Bollinger %B, momentum (20d/63d), volume ratio, candlestick shape, distance-from-low/high, the rubric's own score… each normalised to a small number.</p></div>
+    <div><h3>The 5 verdicts</h3><p class="muted">It outputs a probability for each, picks the biggest. A promotion ladder decides whether it's allowed to <em>act</em> on that verdict or just watch in the shadows.</p></div>
+  </div>
+</section>
+
+<!-- ============ PART B: THE FINDINGS ============ -->
+<section id="hunt">
+  <span class="tag">Part B · The hunt for an edge</span>
+  <h2>So… can it actually make money?</h2>
+  <p>We fed it real daily prices from Yahoo (open/high/low/close/volume, split-adjusted) and tested honestly — out-of-sample, with random-entry controls, and non-overlapping trades. First, the experiments that came up empty:</p>
+
+  <div class="verdict bad"><div class="ic">❌</div><div><strong>Pure technicals, broadly.</strong> The NN's picks averaged <span class="neg">+0.33%</span> vs just buying anything <span class="pos">+1.23%</span> (20-day). Worse than buy-and-hold.</div></div>
+  <div class="verdict warn"><div class="ic">⚠️</div><div><strong>Earnings-beat drift.</strong> Looked promising (+1.5%), but ~half was the untradeable 2020 COVID rebound; stripped out, it's a thin <span class="neg">~+0.5%</span>.</div></div>
+  <div class="verdict warn"><div class="ic">🪤</div><div><strong>The pullback "mirage".</strong> A naive test showed a big edge — then a proper random-entry control shrank it to <span class="neg">+0.04–0.5%</span>. Most of the "edge" was just market drift.</div></div>
+
+  <div class="callout">🧪 The lesson that saved us from fooling ourselves: always compare to a <strong>random-entry control</strong> and use <strong>independent (non-overlapping) trades</strong>. Without them, you manufacture fake edges.</div>
+</section>
+
+<section id="edge">
+  <span class="tag">The real find</span>
+  <h2>The pullback edge — and where it lives</h2>
+  <p>Tested across ~66 S&amp;P 500 stocks, the model's entries <strong>beat random entry on 49 of them</strong>. And the pattern is beautiful: <strong>the edge scales with volatility.</strong> Per-trade advantage over a random entry:</p>
+
+  <div class="card">
+    <h3>🌋 Volatile / cyclical names — real edge</h3>
+    <div class="bar-row"><span>SLB (energy)</span><div class="bar-track"><div class="bar g" style="width:96%"></div></div><span class="val">+7.2pp</span></div>
+    <div class="bar-row"><span>RTX (defence)</span><div class="bar-track"><div class="bar g" style="width:84%"></div></div><span class="val">+6.1pp</span></div>
+    <div class="bar-row"><span>BAC (bank)</span><div class="bar-track"><div class="bar g" style="width:72%"></div></div><span class="val">+5.2pp</span></div>
+    <div class="bar-row"><span>XOM (energy)</span><div class="bar-track"><div class="bar g" style="width:70%"></div></div><span class="val">+5.1pp</span></div>
+    <div class="bar-row"><span>TSLA</span><div class="bar-track"><div class="bar g" style="width:67%"></div></div><span class="val">+4.9pp</span></div>
+    <div class="bar-row"><span>JPM (bank)</span><div class="bar-track"><div class="bar g" style="width:54%"></div></div><span class="val">+3.9pp</span></div>
+    <div class="bar-row"><span>KLAC (semis)</span><div class="bar-track"><div class="bar g" style="width:42%"></div></div><span class="val">+3.0pp</span></div>
+  </div>
+  <div class="card">
+    <h3>😴 Calm staples — edge washes out</h3>
+    <div class="bar-row"><span>JNJ</span><div class="bar-track"><div class="bar b" style="width:3%"></div></div><span class="val">~0</span></div>
+    <div class="bar-row"><span>COST</span><div class="bar-track"><div class="bar b" style="width:3%"></div></div><span class="val">~0</span></div>
+    <div class="bar-row"><span>PEP</span><div class="bar-track"><div class="bar r" style="width:4%"></div></div><span class="val">−0.1</span></div>
+    <div class="bar-row"><span>ABT</span><div class="bar-track"><div class="bar r" style="width:10%"></div></div><span class="val">−0.7</span></div>
+  </div>
+  <p>This is <strong>textbook mean-reversion</strong>: where there's more movement, there's more dip to revert. A real, consistent, theory-backed signal — <em>strongest exactly where you'd expect.</em></p>
+  <div class="callout">But honesty first: it beats <strong>random</strong>, not <strong>buy-and-hold</strong>. It trades rarely and sits in cash, so it can't out-<em>return</em> simply holding a stock that 5×'d. Its value is <strong>timing &amp; risk</strong>, not more money than holding.</div>
+</section>
+
+<section id="risk">
+  <span class="tag">The half that matters most</span>
+  <h2>Risk management = survival</h2>
+  <p>The entry is only half a strategy. Real traders live on the <strong>exit</strong>. Adding an ATR stop-loss (cut losers fast) transformed the risk, sized at 1% of capital per trade ("R" = risk-units):</p>
+  <table>
+    <tr><th>Worst single trade</th><th>Max drawdown</th></tr>
+    <tr><td class="num"><span class="neg">−4.4R</span> &nbsp;💥 account-killer &nbsp;→&nbsp; <span class="pos">−1.1R</span> ✅ capped</td>
+        <td class="num">buy &amp; hold <span class="neg">−69%</span> &nbsp;→&nbsp; managed <span class="pos">~−12%</span></td></tr>
+  </table>
+  <p>The stop didn't add raw profit — it <strong>removed the disasters</strong>. No single trade can blow you up, and the equity curve becomes something you can sleep through.</p>
+  <div class="callout">🪦 The one thing we <em>can't</em> fully test on free data: stops protect against stocks that dip and go to <strong>zero</strong> — and "survivor data" (Yahoo) has deleted those companies from history. So risk-management's true value is understated here.</div>
+</section>
+
+<section id="verdict">
+  <span class="tag">Part C · The honest verdict</span>
+  <h2>What it all adds up to</h2>
+  <div class="verdict good"><div class="ic">✅</div><div><strong>The pullback entry is a real edge</strong> — beats random on ~3 of 4 S&amp;P 500 names, biggest in volatile stocks (+2 to +7pp/trade).</div></div>
+  <div class="verdict good"><div class="ic">✅</div><div><strong>Risk management works</strong> — ATR stops cap the tail and cut drawdowns to a fraction of buy-and-hold.</div></div>
+  <div class="verdict bad"><div class="ic">❌</div><div><strong>It doesn't out-return buy-and-hold</strong> — it's a timing / risk-adjusted edge, not a money-printer.</div></div>
+  <div class="verdict bad"><div class="ic">🧠</div><div><strong>Simpler beats deeper.</strong> The hidden layer <em>never</em> beat the plain linear model — even after we gave the scouts the time dimension (it degenerated to firing zero trades). The edge here is genuinely <strong>simple</strong>.</div></div>
+
+  <div class="card">
+    <h3>The big takeaway — and it surprised us</h3>
+    <p>We kept hoping for a clever deep network. The data said the opposite: <strong>a linear model, on a handful of well-chosen features, on volatile names, with disciplined stops.</strong> The levers were never network depth — they were <strong>which stocks</strong> and <strong>risk control</strong>. The fancy brain was the least important part.</p>
+    <p class="muted">Why depth didn't help: remember XOR — a hidden layer only wins when there's a real <em>nonlinear</em> pattern to find. Here there wasn't one; the edge is a simple "deeply oversold &amp; turning up → modest bounce". The line already captured it.</p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  Built from real experiments on TheSlowBrain · Yahoo daily prices (survivor large-caps) · out-of-sample, random-controlled.<br>
+  Every chart traces to a committed experiment script in <span class="kbd">scripts/</span>. Honest results, no overclaiming.
+</footer>
+
+<script>
+  // scroll progress + active nav
+  const prog = document.getElementById('prog');
+  const links = [...document.querySelectorAll('nav a')];
+  addEventListener('scroll', () => {
+    const h = document.documentElement;
+    prog.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  }, {passive:true});
+</script>
+</body>
+</html>

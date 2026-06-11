@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_library_4b1f7c872f",
+  "title": "Python source src/slowbrain/human_labeling",
+  "summary": "Python source group src/slowbrain/human_labeling with 6 files.",
+  "kind": "library",
+  "source": "python-source-group",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "src/slowbrain/human_labeling",
+      "symbol": "src/slowbrain/human_labeling",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "src/slowbrain/human_labeling/__init__.py",
+      "reason": "source group src/slowbrain/human_labeling"
+    },
+    {
+      "path": "src/slowbrain/human_labeling/core.py",
+      "reason": "source group src/slowbrain/human_labeling"
+    },
+    {
+      "path": "src/slowbrain/human_labeling/io.py",
+      "reason": "source group src/slowbrain/human_labeling"
+    },
+    {
+      "path": "src/slowbrain/human_labeling/models.py",
+      "reason": "source group src/slowbrain/human_labeling"
+    },
+    {
+      "path": "src/slowbrain/human_labeling/render.py",
+      "reason": "source group src/slowbrain/human_labeling"
+    },
+    {
+      "path": "src/slowbrain/human_labeling/utils.py",
+      "reason": "source group src/slowbrain/human_labeling"
+    }
+  ],
+  "contextFiles": [],
+  "tests": [],
+  "tags": [
+    "python",
+    "source-group"
+  ],
+  "trustBoundaries": [],
+  "status": "error",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [
+    {
+      "runId": "20260611T181806-3977d2",
+      "kind": "review-error",
+      "summary": "codex provider failed: OpenAI Codex v0.121.0 (research preview)\n--------\nworkdir: C:\\Users\\AndyC\\projects\\TheSlowBrain\nmodel: gpt-5.5\nprovider: openai\napproval: never\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 019eb7e7-f347-7733-87ec-8aacffc90041\n--------\nuser\nYou are reviewing one semantic feature for clawpatch.\n\nReturn strict JSON only. No markdown fences.\n\nProject:\n{\n  \"name\": \"TheSlowBrain\",\n  \"detected\": {\n    \"languages\": [\n      \"python\"\n    ],\n    \"frameworks\": [\n      \"pytest\"\n    ],\n    \"packageManagers\": [\n      \"uv\"\n    ],\n    \"commands\": {\n      \"typecheck\": \"uv run mypy .\",\n      \"lint\": \"uv run ruff check .\",\n      \"format\": \"uv run ruff format --check .\",\n      \"test\": \"uv run pytest\"\n    }\n  }\n}\n\nFeature:\n{\n  \"schemaVersion\": 1,\n  \"featureId\": \"feat_library_4b1f7c872f\",\n  \"title\": \"Python source src/slowbrain/human_labeling\",\n  \"summary\": \"Python source group src/slowbrain/human_labeling with 6 files.\",\n  \"kind\": \"library\",\n  \"source\": \"python-source-group\",\n  \"confidence\": \"medium\",\n  \"entrypoints\": [\n    {\n      \"path\": \"src/slowbrain/human_labeling\",\n      \"symbol\": \"src/slowbrain/human_labeling\",\n      \"route\": null,\n      \"command\": null\n    }\n  ],\n  \"ownedFiles\": [\n    {\n      \"path\": \"src/slowbrain/human_labeling/__init__.py\",\n      \"reason\": \"source group src/slowbrain/human_labeling\"\n    },\n    {\n      \"path\": \"src/slowbrain/human_labeling/core.py\",\n      \"reason\": \"source group src/slowbrain/human_labeling\"\n    },\n    {\n      \"path\": \"src/slowbrain/human_labeling/io.py\",\n      \"reason\": \"source group src/slowbrain/human_labeling\"\n    },\n    {\n      \"path\": \"src/slowbrain/human_labeling/models.py\",\n      \"reason\": \"source group src/slowbrain/human_labeling\"\n    },\n    {\n      \"path\": \"src/slowbrain/human_labeling/render.py\",\n      \"reason\": \"source group src/slowbrain/human_labeling\"\n    },\n    {\n      \"path\": \"src/slowbrain/human_labeling/utils.py\",\n      \"reason\": \"source group src/slowbrain/human_labeling\"\n    }\n  ],\n  \"contextFiles\": [],\n  \"tests\": [],\n  \"tags\": [\n    \"python\",\n    \"source-group\"\n  ],\n  \"trustBoundaries\": [],\n  \"status\": \"claimed\",\n  \"lock\": {\n    \"lockedByRunId\": \"20260611T181806-3977d2\",\n    \"lockedAt\": \"2026-06-11T18:18:06.876Z\",\n    \"hostname\": \"LAPTOP-QF26BVVL\",\n    \"pid\": 19716\n  },\n  \"findingIds\": [],\n  \"patchAttemptIds\": [],\n  \"analysisHistory\": [],\n  \"createdAt\": \"2026-06-11T18:14:29.296Z\",\n  \"updatedAt\": \"2026-06-11T18:18:06.890Z\"\n}\n\nReview categories:\n- correctness bugs\n- security issues\n- race/concurrency bugs\n- data loss/corruption\n- resource leaks\n- bad error handling\n- permission/auth gaps\n- API contract mismatches\n- missing/weak tests\n- release/build hazards\n- maintainability risks with concrete impact\n\n\n\nInspect owned files, context files, and linked tests. Treat included tests as first-class\nevidence of intended behavior. If tests contradict a suspected bug, either skip it or\ndowngrade confidence and explain the uncertainty. Avoid reporting behavior as a bug\nsolely because a helper name implies a broader contract. Deduplicate sibling/root-cause\nissues: when the same bug pattern appears in multiple owned files, emit one finding\nwith multiple evidence refs instead of separate one-off findings.\n\nAvoid speculative low-evidence findings. Evidence must point at included files.\n\nJSON shape:\n{\n  \"findings\": [\n    {\n      \"title\": \"string\",\n      \"category\": \"bug|security|performance|concurrency|api-contract|data-loss|test-gap|docs-gap|build-release|maintainability\",\n      \"severity\": \"critical|high|medium|low\",\n      \"confidence\": \"high|medium|low\",\n      \"evidence\": [{\"path\":\"string\",\"startLine\":1,\"endLine\":1,\"symbol\":null,\"quote\":null}],\n      \"reasoning\": \"string\",\n      \"reproduction\": null,\n      \"recommendation\": \"string\",\n      \"whyTestsDoNotAlreadyCoverThis\": \"string\",\n      \"suggestedRegressionTest\": \"string or null\",\n      \"minimumFixScope\": \"string\"\n    }\n  ],\n  \"inspected\": {\"files\":[\"string\"],\"symbols\":[\"string\"],\"notes\":[\"string\"]}\n}\n\nFiles:\n\n...[trimmed]...\nrn f\"{_fmt(context.open)} / {_fmt(context.high)} / {_fmt(context.low)}\"\r\n\r\n\r\ndef _recent_table(bars: tuple[RecentBar, ...]) -> str:\r\n    if not bars:\r\n        return \"<p>No recent OHLCV bars were available.</p>\"\r\n    rows = \"\\n\".join(\r\n        f\"<tr><td>{_e(bar.date)}</td><td>{_fmt(bar.open)}</td><td>{_fmt(bar.high)}</td>\"\r\n        f\"<td>{_fmt(bar.low)}</td><td>{_fmt(bar.close)}</td><td>{_fmt(bar.volume)}</td></tr>\"\r\n        for bar in bars[-5:]\r\n    )\r\n    return f\"\"\"<table>\r\n  <thead><tr><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr></thead>\r\n  <tbody>{rows}</tbody>\r\n</table>\"\"\"\r\n\r\n\r\ndef _candle_svg(bars: tuple[RecentBar, ...]) -> str:\r\n    if not bars:\r\n        return \"<p>No chart available.</p>\"\r\n    width = 640\r\n    height = 220\r\n    pad = 18\r\n    lows = [bar.low for bar in bars]\r\n    highs = [bar.high for bar in bars]\r\n    low = min(lows)\r\n    high = max(highs)\r\n    span = max(high - low, 0.0001)\r\n    step = (width - pad * 2) / max(len(bars), 1)\r\n    candle_width = max(5.0, step * 0.48)\r\n\r\n    def y(value: float) -> float:\r\n        return pad + (high - value) / span * (height - pad * 2)\r\n\r\n    pieces = [\r\n        f'<svg viewBox=\"0 0 {width} {height}\" role=\"img\" aria-label=\"OHLC candlestick chart\">',\r\n        f'<line x1=\"{pad}\" y1=\"{y(high):.2f}\" x2=\"{width - pad}\" y2=\"{y(high):.2f}\" stroke=\"#d9dce8\"/>',\r\n        f'<line x1=\"{pad}\" y1=\"{y(low):.2f}\" x2=\"{width - pad}\" y2=\"{y(low):.2f}\" stroke=\"#d9dce8\"/>',\r\n    ]\r\n    for index, bar in enumerate(bars):\r\n        center = pad + step * index + step / 2\r\n        color = \"#17b26a\" if bar.close >= bar.open else \"#f04438\"\r\n        y_open = y(bar.open)\r\n        y_close = y(bar.close)\r\n        top = min(y_open, y_close)\r\n        body_height = max(abs(y_close - y_open), 2.0)\r\n        pieces.append(\r\n            f'<line x1=\"{center:.2f}\" y1=\"{y(bar.high):.2f}\" x2=\"{center:.2f}\" '\r\n            f'y2=\"{y(bar.low):.2f}\" stroke=\"{color}\" stroke-width=\"2\"/>'\r\n        )\r\n        pieces.append(\r\n            f'<rect x=\"{center - candle_width / 2:.2f}\" y=\"{top:.2f}\" width=\"{candle_width:.2f}\" '\r\n            f'height=\"{body_height:.2f}\" fill=\"{color}\" rx=\"1\"/>'\r\n        )\r\n    pieces.append(\"</svg>\")\r\n    return \"\".join(pieces)\r\n\r\n\r\n\n\n--- src/slowbrain/human_labeling/utils.py\n﻿\"\"\"Small coercion and formatting helpers for human-labeling artifacts.\"\"\"\r\n\r\nfrom __future__ import annotations\r\n\r\nimport html\r\nfrom collections.abc import Mapping\r\nfrom pathlib import Path\n\nfrom ..eval_council import VALID_HUMAN_LABELS\nfrom ..numeric import optional_float\n\r\n\r\ndef _mapping(value: object) -> Mapping[str, object]:\r\n    return value if isinstance(value, Mapping) else {}\r\n\r\n\r\ndef _text(value: object) -> str:\r\n    return str(value or \"\").strip()\r\n\r\n\r\ndef _float(value: object) -> float:\r\n    parsed = _optional_float(value)\r\n    return parsed if parsed is not None else 0.0\r\n\r\n\r\ndef _optional_float(value: object) -> float | None:\n    return optional_float(value, ndigits=6)\n\r\n\r\ndef _existing_label(value: object) -> str:\r\n    label = _text(value).upper()\r\n    return label if label in VALID_HUMAN_LABELS else \"\"\r\n\r\n\r\ndef _blank_none(value: object) -> object:\r\n    return \"\" if value is None else value\r\n\r\n\r\ndef _resolve(project_root: Path, path: Path) -> Path:\r\n    return path if path.is_absolute() else project_root / path\r\n\r\n\r\ndef _fmt(value: object) -> str:\r\n    if value is None or value == \"\":\r\n        return \"n/a\"\r\n    if isinstance(value, float):\r\n        return f\"{value:,.2f}\"\r\n    return str(value)\r\n\r\n\r\ndef _e(value: object) -> str:\n    return html.escape(str(value), quote=True)\n\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\n",
+      "provider": "codex",
+      "model": null,
+      "reasoningEffort": null,
+      "createdAt": "2026-06-11T18:18:17.209Z"
+    }
+  ],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:18:17.209Z"
+}

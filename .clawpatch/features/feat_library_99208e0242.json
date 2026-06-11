@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_library_99208e0242",
+  "title": "Python source src/slowbrain/backtest",
+  "summary": "Python source group src/slowbrain/backtest with 4 files.",
+  "kind": "library",
+  "source": "python-source-group",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "src/slowbrain/backtest",
+      "symbol": "src/slowbrain/backtest",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "src/slowbrain/backtest/__init__.py",
+      "reason": "source group src/slowbrain/backtest"
+    },
+    {
+      "path": "src/slowbrain/backtest/core.py",
+      "reason": "source group src/slowbrain/backtest"
+    },
+    {
+      "path": "src/slowbrain/backtest/economic.py",
+      "reason": "source group src/slowbrain/backtest"
+    },
+    {
+      "path": "src/slowbrain/backtest/stats.py",
+      "reason": "source group src/slowbrain/backtest"
+    }
+  ],
+  "contextFiles": [],
+  "tests": [],
+  "tags": [
+    "python",
+    "source-group"
+  ],
+  "trustBoundaries": [],
+  "status": "error",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [
+    {
+      "runId": "20260611T181806-3977d2",
+      "kind": "review-error",
+      "summary": "codex provider failed: OpenAI Codex v0.121.0 (research preview)\n--------\nworkdir: C:\\Users\\AndyC\\projects\\TheSlowBrain\nmodel: gpt-5.5\nprovider: openai\napproval: never\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 019eb7e7-f344-7551-898d-f48134ed1ebd\n--------\nuser\nYou are reviewing one semantic feature for clawpatch.\n\nReturn strict JSON only. No markdown fences.\n\nProject:\n{\n  \"name\": \"TheSlowBrain\",\n  \"detected\": {\n    \"languages\": [\n      \"python\"\n    ],\n    \"frameworks\": [\n      \"pytest\"\n    ],\n    \"packageManagers\": [\n      \"uv\"\n    ],\n    \"commands\": {\n      \"typecheck\": \"uv run mypy .\",\n      \"lint\": \"uv run ruff check .\",\n      \"format\": \"uv run ruff format --check .\",\n      \"test\": \"uv run pytest\"\n    }\n  }\n}\n\nFeature:\n{\n  \"schemaVersion\": 1,\n  \"featureId\": \"feat_library_99208e0242\",\n  \"title\": \"Python source src/slowbrain/backtest\",\n  \"summary\": \"Python source group src/slowbrain/backtest with 4 files.\",\n  \"kind\": \"library\",\n  \"source\": \"python-source-group\",\n  \"confidence\": \"medium\",\n  \"entrypoints\": [\n    {\n      \"path\": \"src/slowbrain/backtest\",\n      \"symbol\": \"src/slowbrain/backtest\",\n      \"route\": null,\n      \"command\": null\n    }\n  ],\n  \"ownedFiles\": [\n    {\n      \"path\": \"src/slowbrain/backtest/__init__.py\",\n      \"reason\": \"source group src/slowbrain/backtest\"\n    },\n    {\n      \"path\": \"src/slowbrain/backtest/core.py\",\n      \"reason\": \"source group src/slowbrain/backtest\"\n    },\n    {\n      \"path\": \"src/slowbrain/backtest/economic.py\",\n      \"reason\": \"source group src/slowbrain/backtest\"\n    },\n    {\n      \"path\": \"src/slowbrain/backtest/stats.py\",\n      \"reason\": \"source group src/slowbrain/backtest\"\n    }\n  ],\n  \"contextFiles\": [],\n  \"tests\": [],\n  \"tags\": [\n    \"python\",\n    \"source-group\"\n  ],\n  \"trustBoundaries\": [],\n  \"status\": \"claimed\",\n  \"lock\": {\n    \"lockedByRunId\": \"20260611T181806-3977d2\",\n    \"lockedAt\": \"2026-06-11T18:18:06.878Z\",\n    \"hostname\": \"LAPTOP-QF26BVVL\",\n    \"pid\": 19716\n  },\n  \"findingIds\": [],\n  \"patchAttemptIds\": [],\n  \"analysisHistory\": [],\n  \"createdAt\": \"2026-06-11T18:14:29.296Z\",\n  \"updatedAt\": \"2026-06-11T18:18:06.892Z\"\n}\n\nReview categories:\n- correctness bugs\n- security issues\n- race/concurrency bugs\n- data loss/corruption\n- resource leaks\n- bad error handling\n- permission/auth gaps\n- API contract mismatches\n- missing/weak tests\n- release/build hazards\n- maintainability risks with concrete impact\n\n\n\nInspect owned files, context files, and linked tests. Treat included tests as first-class\nevidence of intended behavior. If tests contradict a suspected bug, either skip it or\ndowngrade confidence and explain the uncertainty. Avoid reporting behavior as a bug\nsolely because a helper name implies a broader contract. Deduplicate sibling/root-cause\nissues: when the same bug pattern appears in multiple owned files, emit one finding\nwith multiple evidence refs instead of separate one-off findings.\n\nAvoid speculative low-evidence findings. Evidence must point at included files.\n\nJSON shape:\n{\n  \"findings\": [\n    {\n      \"title\": \"string\",\n      \"category\": \"bug|security|performance|concurrency|api-contract|data-loss|test-gap|docs-gap|build-release|maintainability\",\n      \"severity\": \"critical|high|medium|low\",\n      \"confidence\": \"high|medium|low\",\n      \"evidence\": [{\"path\":\"string\",\"startLine\":1,\"endLine\":1,\"symbol\":null,\"quote\":null}],\n      \"reasoning\": \"string\",\n      \"reproduction\": null,\n      \"recommendation\": \"string\",\n      \"whyTestsDoNotAlreadyCoverThis\": \"string\",\n      \"suggestedRegressionTest\": \"string or null\",\n      \"minimumFixScope\": \"string\"\n    }\n  ],\n  \"inspected\": {\"files\":[\"string\"],\"symbols\":[\"string\"],\"notes\":[\"string\"]}\n}\n\nFiles:\n--- src/slowbrain/backtest/__init__.py\n﻿\"\"\"Backtest package public API.\"\"\"\n\nfrom .core import (\n    DecisionFn,\n    combinatorial_purged_cv_profits,\n    combinatorial_purged_cv_train_test_profits,\n    evaluate_rubric,\n    purged_embargoed_split,\n    walk_forward_window_profits,\n)\nfrom .economic import EconomicEdge, economi\n...[trimmed]...\n = sum(left for left, _ in pairs) / len(pairs)\r\n    avg_benchmark = sum(right for _, right in pairs) / len(pairs)\r\n    covariance = sum((left - avg_portfolio) * (right - avg_benchmark) for left, right in pairs)\r\n    variance = sum((right - avg_benchmark) ** 2 for _, right in pairs)\r\n    return covariance / variance if variance else 0.0\r\n\r\n\r\ndef information_ratio(active_returns: Sequence[float]) -> float:\r\n    return sharpe(active_returns)\r\n\r\n\r\ndef deflated_sharpe(\n    returns: Sequence[float],\r\n    *,\r\n    sharpe: float,\r\n    effective_trial_count: int,\r\n) -> tuple[float, float]:\r\n    if len(returns) < 2 or sharpe == 0.0:\r\n        return 0.0, 1.0\r\n    skewness, kurtosis = return_moments(returns)\r\n    standard_error = sharpe_standard_error(\n        sharpe,\r\n        sample_count=len(returns),\r\n        skewness=skewness,\r\n        kurtosis=kurtosis,\r\n    )\r\n    if standard_error <= 0.0:\r\n        return 0.0, 1.0\r\n    threshold = standard_error * _expected_maximum_normal(effective_trial_count)\r\n    z_score = (sharpe - threshold) / standard_error\r\n    p_value = 1.0 - NormalDist().cdf(z_score)\r\n    return z_score, max(0.0, min(1.0, p_value))\r\n\r\n\r\ndef sharpe_standard_error(\r\n    sharpe: float,\r\n    *,\r\n    sample_count: int,\r\n    skewness: float,\r\n    kurtosis: float,\r\n) -> float:\r\n    numerator = 1.0 - (skewness * sharpe) + (((kurtosis - 1.0) / 4.0) * sharpe * sharpe)\r\n    return sqrt(max(numerator / max(sample_count - 1, 1), 1e-12))\r\n\r\n\r\ndef _expected_maximum_normal(effective_trial_count: int) -> float:\r\n    trials = max(effective_trial_count, 1)\r\n    if trials <= 1:\r\n        return 0.0\r\n    normal = NormalDist()\r\n    euler_mascheroni = 0.5772156649\r\n    first = normal.inv_cdf(_clipped_probability(1.0 - (1.0 / trials)))\r\n    second = normal.inv_cdf(_clipped_probability(1.0 - (1.0 / (trials * e))))\r\n    return ((1.0 - euler_mascheroni) * first) + (euler_mascheroni * second)\r\n\r\n\r\ndef _clipped_probability(value: float) -> float:\r\n    return min(max(value, 1e-12), 1.0 - 1e-12)\r\n\r\n\r\ndef return_moments(values: Sequence[float]) -> tuple[float, float]:\r\n    if len(values) < 2:\r\n        return 0.0, 3.0\r\n    average = sum(values) / len(values)\r\n    centered = [value - average for value in values]\r\n    variance = sum(value * value for value in centered) / len(centered)\r\n    if variance <= 0.0:\r\n        return 0.0, 3.0\r\n    sigma = sqrt(variance)\r\n    skewness = sum((value / sigma) ** 3 for value in centered) / len(centered)\r\n    kurtosis = sum((value / sigma) ** 4 for value in centered) / len(centered)\r\n    return skewness, kurtosis\r\n\r\n\r\ndef probability_backtest_overfit(train_test_profits: Sequence[tuple[float, float]]) -> float:\r\n    if not train_test_profits:\r\n        return 1.0\r\n    if len(train_test_profits) < 3:\r\n        return 1.0\r\n    in_sample_threshold = median(train for train, _ in train_test_profits)\r\n    out_sample_threshold = median(test for _, test in train_test_profits)\r\n    selected = [test for train, test in train_test_profits if train >= in_sample_threshold]\r\n    if not selected:\r\n        return 1.0\r\n    overfit_count = sum(1 for test in selected if test < out_sample_threshold)\r\n    return overfit_count / len(selected)\r\n\r\n\r\ndef sortino(values: Sequence[float]) -> float:\r\n    downside = [min(value, 0.0) for value in values]\r\n    if not downside or all(value == 0 for value in downside):\r\n        return sharpe(values)\r\n    downside_deviation = sqrt(sum(value * value for value in downside) / len(downside))\r\n    average = sum(values) / len(values) if values else 0.0\r\n    return average / downside_deviation if downside_deviation else 0.0\r\n\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\n",
+      "provider": "codex",
+      "model": null,
+      "reasoningEffort": null,
+      "createdAt": "2026-06-11T18:18:16.898Z"
+    }
+  ],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:18:16.898Z"
+}

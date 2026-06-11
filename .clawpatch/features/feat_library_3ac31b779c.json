@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_library_3ac31b779c",
+  "title": "Python project the-slow-brain",
+  "summary": "Python project metadata in pyproject.toml.",
+  "kind": "library",
+  "source": "python-project",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "pyproject.toml",
+      "symbol": "the-slow-brain",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "pyproject.toml",
+      "reason": "python project metadata"
+    }
+  ],
+  "contextFiles": [
+    {
+      "path": "README.md",
+      "reason": "python project context"
+    }
+  ],
+  "tests": [],
+  "tags": [
+    "python",
+    "package"
+  ],
+  "trustBoundaries": [],
+  "status": "error",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [
+    {
+      "runId": "20260611T181806-3977d2",
+      "kind": "review-error",
+      "summary": "codex provider failed: 2026-06-11T18:18:07.914592Z ERROR codex_core_skills::manager: failed to install system skills: io error while remove existing system skills dir: Access is denied. (os error 5)\nOpenAI Codex v0.121.0 (research preview)\n--------\nworkdir: C:\\Users\\AndyC\\projects\\TheSlowBrain\nmodel: gpt-5.5\nprovider: openai\napproval: never\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 019eb7e7-f37a-7752-bac1-36048ca430b8\n--------\nuser\nYou are reviewing one semantic feature for clawpatch.\n\nReturn strict JSON only. No markdown fences.\n\nProject:\n{\n  \"name\": \"TheSlowBrain\",\n  \"detected\": {\n    \"languages\": [\n      \"python\"\n    ],\n    \"frameworks\": [\n      \"pytest\"\n    ],\n    \"packageManagers\": [\n      \"uv\"\n    ],\n    \"commands\": {\n      \"typecheck\": \"uv run mypy .\",\n      \"lint\": \"uv run ruff check .\",\n      \"format\": \"uv run ruff format --check .\",\n      \"test\": \"uv run pytest\"\n    }\n  }\n}\n\nFeature:\n{\n  \"schemaVersion\": 1,\n  \"featureId\": \"feat_library_3ac31b779c\",\n  \"title\": \"Python project the-slow-brain\",\n  \"summary\": \"Python project metadata in pyproject.toml.\",\n  \"kind\": \"library\",\n  \"source\": \"python-project\",\n  \"confidence\": \"medium\",\n  \"entrypoints\": [\n    {\n      \"path\": \"pyproject.toml\",\n      \"symbol\": \"the-slow-brain\",\n      \"route\": null,\n      \"command\": null\n    }\n  ],\n  \"ownedFiles\": [\n    {\n      \"path\": \"pyproject.toml\",\n      \"reason\": \"python project metadata\"\n    }\n  ],\n  \"contextFiles\": [\n    {\n      \"path\": \"README.md\",\n      \"reason\": \"python project context\"\n    }\n  ],\n  \"tests\": [],\n  \"tags\": [\n    \"python\",\n    \"package\"\n  ],\n  \"trustBoundaries\": [],\n  \"status\": \"claimed\",\n  \"lock\": {\n    \"lockedByRunId\": \"20260611T181806-3977d2\",\n    \"lockedAt\": \"2026-06-11T18:18:06.876Z\",\n    \"hostname\": \"LAPTOP-QF26BVVL\",\n    \"pid\": 19716\n  },\n  \"findingIds\": [],\n  \"patchAttemptIds\": [],\n  \"analysisHistory\": [],\n  \"createdAt\": \"2026-06-11T18:14:29.296Z\",\n  \"updatedAt\": \"2026-06-11T18:18:06.889Z\"\n}\n\nReview categories:\n- correctness bugs\n- security issues\n- race/concurrency bugs\n- data loss/corruption\n- resource leaks\n- bad error handling\n- permission/auth gaps\n- API contract mismatches\n- missing/weak tests\n- release/build hazards\n- maintainability risks with concrete impact\n\n\n\nInspect owned files, context files, and linked tests. Treat included tests as first-class\nevidence of intended behavior. If tests contradict a suspected bug, either skip it or\ndowngrade confidence and explain the uncertainty. Avoid reporting behavior as a bug\nsolely because a helper name implies a broader contract. Deduplicate sibling/root-cause\nissues: when the same bug pattern appears in multiple owned files, emit one finding\nwith multiple evidence refs instead of separate one-off findings.\n\nAvoid speculative low-evidence findings. Evidence must point at included files.\n\nJSON shape:\n{\n  \"findings\": [\n    {\n      \"title\": \"string\",\n      \"category\": \"bug|security|performance|concurrency|api-contract|data-loss|test-gap|docs-gap|build-release|maintainability\",\n      \"severity\": \"critical|high|medium|low\",\n      \"confidence\": \"high|medium|low\",\n      \"evidence\": [{\"path\":\"string\",\"startLine\":1,\"endLine\":1,\"symbol\":null,\"quote\":null}],\n      \"reasoning\": \"string\",\n      \"reproduction\": null,\n      \"recommendation\": \"string\",\n      \"whyTestsDoNotAlreadyCoverThis\": \"string\",\n      \"suggestedRegressionTest\": \"string or null\",\n      \"minimumFixScope\": \"string\"\n    }\n  ],\n  \"inspected\": {\"files\":[\"string\"],\"symbols\":[\"string\"],\"notes\":[\"string\"]}\n}\n\nFiles:\n--- pyproject.toml\n[project]\nname = \"the-slow-brain\"\nversion = \"0.1.0\"\ndescription = \"Profit-seeking Slow Brain stock trading research and paper/shadow decision system.\"\nrequires-python = \">=3.13\"\ndependencies = [\n    \"openai>=2.38,<3\",\n]\n\n[dependency-groups]\ndev = [\n  \"mypy>=1.18,<1.19\",\n  \"pytest-cov>=7.0,<8.0\",\n  \"pytest>=9.0.3\",\n  \"ruff>=0.14,<0.15\",\n]\n\n[tool.ruff]\ntarget-version = \"py313\"\nline-length = 120\n\n[tool.ruff.lint]\nselect = [\"E\", \"F\", \"W\", \"I\", \"B\", \"UP\", \"SIM\", \"C4\", \"PTH\", \n...[trimmed]...\nt-graded ladder — veto → co-decide → primary (proposing decisions, with the rubric as a\n  guardrail) — demoting automatically if its edge fades. All paper/shadow.\n- **Reports** a concise brief and append-only track record. Broker execution stays gated.\n\n### The five labels\n\n| Label | Meaning |\n|---|---|\n| **BUY** | Strong score that passes every quality, risk, and data gate. |\n| **SELL** | Exit / negative signal for a held name. |\n| **HOLD** | No action — neutral or insufficient edge. |\n| **WATCHLIST** | A near-miss just below the buy threshold; worth watching, not buying. |\n| **AVOID** | A high score actively blocked by a failed quality / risk / data gate. |\n\n---\n\n## Quickstart\n\nRequirements: **Python ≥ 3.13** and [**uv**](https://docs.astral.sh/uv/).\n\n```bash\n# 1. Install dependencies (creates a local .venv from the locked versions)\nuv sync\n\n# 2. (optional) configure integrations — everything works with an empty .env\ncp .env.example .env\n\n# 3a. Prove it works end-to-end with zero private data (synthetic dataset):\nuv run python scripts/run_demo_cycle.py\n\n# 3b. ...or run the quality gates:\nuv run pytest\nuv run ruff check\nuv run mypy\n```\n\n`run_demo_cycle.py` builds a small synthetic dataset, runs one full research cycle offline, and\nprints the resulting brief plus the path to the generated report — no API keys or external data\nrequired. To run on your **own** dataset instead, point `SLOWBRAIN_LEGACY_STOCK_PROJECT` at it\nand use `scripts/run_first_slowbrain_cycle.py`.\n\n---\n\n## Documentation\n\n- 📘 **[Live visual explainer →](https://andyclapsonprojects-hub.github.io/TheSlowBrain/)** — a\n  single, self-contained page with **Beginner / Intermediate / Expert** views of what the project\n  is and how to use it. (Source: [docs/index.html](docs/index.html) — also opens locally in any browser.)\n- 📗 **[docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md)** — the architecture, the pipeline, the\n  evaluation layers, the safety model, and how to extend the system, in prose.\n\n---\n\n## Dependencies\n\nThe core is intentionally **standard-library only** — there is no numpy, pandas, or PyTorch.\nThe learning gate is a ~150-line scalar autograd engine written from scratch.\n\n| Scope | Packages |\n|---|---|\n| Runtime | `openai` (the only third-party runtime dependency; used for the optional LLM judge) |\n| Dev / tooling | `ruff`, `mypy` (strict), `pytest`, `pytest-cov` (coverage gate ≥ 93%) |\n\nExact, reproducible versions are pinned in [`pyproject.toml`](pyproject.toml) and `uv.lock`.\n\n---\n\n## Project layout\n\n```\nsrc/slowbrain/      Core library (features, rubrics, backtest, eval council,\n                    learning gate, market data, CIO/risk, reporting, broker boundary)\nscripts/            Operator entrypoints (run a cycle, shadow runs, briefs, broker preview)\ntests/              Unit + integration test suites\ndocs/               index.html explainer and HOW_IT_WORKS.md\n```\n\n---\n\n## Safety\n\n- **Live trading is blocked by default.** A manual broker path exists, but a real order requires\n  *all* of: a fresh ready preview, a process-scoped enable flag, an `--execute` flag, a matching\n  approval token, valid broker health, and duplicate-ledger clearance.\n- **Secrets stay in the environment.** `.env` is gitignored and never committed; reports never\n  persist tokens or credentials.\n- **Honesty over optimism.** Proxy, missing, low-sample, or stale evidence is explicitly labelled\n  — never treated as production-grade proof.\n- The optional OpenAI judge is research/evaluation only and degrades gracefully when unavailable.\n\n---\n\n## License\n\n[MIT](LICENSE) © 2026 Andy Clapson.\n\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\n",
+      "provider": "codex",
+      "model": null,
+      "reasoningEffort": null,
+      "createdAt": "2026-06-11T18:18:16.404Z"
+    }
+  ],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:18:16.404Z"
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "featureId": "feat_library_5294b31fa3",
+  "title": "Python source src/slowbrain#4",
+  "summary": "Python source group src/slowbrain#4 with 2 files.",
+  "kind": "library",
+  "source": "python-source-group",
+  "confidence": "medium",
+  "entrypoints": [
+    {
+      "path": "src/slowbrain#4",
+      "symbol": "src/slowbrain#4",
+      "route": null,
+      "command": null
+    }
+  ],
+  "ownedFiles": [
+    {
+      "path": "src/slowbrain/trading_flow.py",
+      "reason": "source group src/slowbrain#4"
+    },
+    {
+      "path": "src/slowbrain/workflow.py",
+      "reason": "source group src/slowbrain#4"
+    }
+  ],
+  "contextFiles": [
+    {
+      "path": "tests/test_workflow.py",
+      "reason": "associated test"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/test_workflow.py",
+      "command": "uv run pytest"
+    }
+  ],
+  "tags": [
+    "python",
+    "source-group"
+  ],
+  "trustBoundaries": [],
+  "status": "error",
+  "lock": null,
+  "findingIds": [],
+  "patchAttemptIds": [],
+  "analysisHistory": [
+    {
+      "runId": "20260611T181806-3977d2",
+      "kind": "review-error",
+      "summary": "codex provider failed: OpenAI Codex v0.121.0 (research preview)\n--------\nworkdir: C:\\Users\\AndyC\\projects\\TheSlowBrain\nmodel: gpt-5.5\nprovider: openai\napproval: never\nsandbox: read-only\nreasoning effort: xhigh\nreasoning summaries: none\nsession id: 019eb7e7-f344-7453-a020-ea6c581b9105\n--------\nuser\nYou are reviewing one semantic feature for clawpatch.\n\nReturn strict JSON only. No markdown fences.\n\nProject:\n{\n  \"name\": \"TheSlowBrain\",\n  \"detected\": {\n    \"languages\": [\n      \"python\"\n    ],\n    \"frameworks\": [\n      \"pytest\"\n    ],\n    \"packageManagers\": [\n      \"uv\"\n    ],\n    \"commands\": {\n      \"typecheck\": \"uv run mypy .\",\n      \"lint\": \"uv run ruff check .\",\n      \"format\": \"uv run ruff format --check .\",\n      \"test\": \"uv run pytest\"\n    }\n  }\n}\n\nFeature:\n{\n  \"schemaVersion\": 1,\n  \"featureId\": \"feat_library_5294b31fa3\",\n  \"title\": \"Python source src/slowbrain#4\",\n  \"summary\": \"Python source group src/slowbrain#4 with 2 files.\",\n  \"kind\": \"library\",\n  \"source\": \"python-source-group\",\n  \"confidence\": \"medium\",\n  \"entrypoints\": [\n    {\n      \"path\": \"src/slowbrain#4\",\n      \"symbol\": \"src/slowbrain#4\",\n      \"route\": null,\n      \"command\": null\n    }\n  ],\n  \"ownedFiles\": [\n    {\n      \"path\": \"src/slowbrain/trading_flow.py\",\n      \"reason\": \"source group src/slowbrain#4\"\n    },\n    {\n      \"path\": \"src/slowbrain/workflow.py\",\n      \"reason\": \"source group src/slowbrain#4\"\n    }\n  ],\n  \"contextFiles\": [\n    {\n      \"path\": \"tests/test_workflow.py\",\n      \"reason\": \"associated test\"\n    }\n  ],\n  \"tests\": [\n    {\n      \"path\": \"tests/test_workflow.py\",\n      \"command\": \"uv run pytest\"\n    }\n  ],\n  \"tags\": [\n    \"python\",\n    \"source-group\"\n  ],\n  \"trustBoundaries\": [],\n  \"status\": \"claimed\",\n  \"lock\": {\n    \"lockedByRunId\": \"20260611T181806-3977d2\",\n    \"lockedAt\": \"2026-06-11T18:18:06.876Z\",\n    \"hostname\": \"LAPTOP-QF26BVVL\",\n    \"pid\": 19716\n  },\n  \"findingIds\": [],\n  \"patchAttemptIds\": [],\n  \"analysisHistory\": [],\n  \"createdAt\": \"2026-06-11T18:14:29.296Z\",\n  \"updatedAt\": \"2026-06-11T18:18:06.890Z\"\n}\n\nReview categories:\n- correctness bugs\n- security issues\n- race/concurrency bugs\n- data loss/corruption\n- resource leaks\n- bad error handling\n- permission/auth gaps\n- API contract mismatches\n- missing/weak tests\n- release/build hazards\n- maintainability risks with concrete impact\n\n\n\nInspect owned files, context files, and linked tests. Treat included tests as first-class\nevidence of intended behavior. If tests contradict a suspected bug, either skip it or\ndowngrade confidence and explain the uncertainty. Avoid reporting behavior as a bug\nsolely because a helper name implies a broader contract. Deduplicate sibling/root-cause\nissues: when the same bug pattern appears in multiple owned files, emit one finding\nwith multiple evidence refs instead of separate one-off findings.\n\nAvoid speculative low-evidence findings. Evidence must point at included files.\n\nJSON shape:\n{\n  \"findings\": [\n    {\n      \"title\": \"string\",\n      \"category\": \"bug|security|performance|concurrency|api-contract|data-loss|test-gap|docs-gap|build-release|maintainability\",\n      \"severity\": \"critical|high|medium|low\",\n      \"confidence\": \"high|medium|low\",\n      \"evidence\": [{\"path\":\"string\",\"startLine\":1,\"endLine\":1,\"symbol\":null,\"quote\":null}],\n      \"reasoning\": \"string\",\n      \"reproduction\": null,\n      \"recommendation\": \"string\",\n      \"whyTestsDoNotAlreadyCoverThis\": \"string\",\n      \"suggestedRegressionTest\": \"string or null\",\n      \"minimumFixScope\": \"string\"\n    }\n  ],\n  \"inspected\": {\"files\":[\"string\"],\"symbols\":[\"string\"],\"notes\":[\"string\"]}\n}\n\nFiles:\n--- src/slowbrain/trading_flow.py\n\"\"\"CIO trading flow and blocked broker preview.\"\"\"\n\nfrom __future__ import annotations\n\nimport csv\nfrom collections.abc import Sequence\nfrom pathlib import Path\n\nfrom .accounting import (\n    AccountingSummary,\n    MarkToMarketSummary,\n    calculate_fifo_pnl_from_csv,\n    calculate_mark_to_market_from_positions,\n    load_open_position_market_values,\n)\nfrom .cio import CioPolicy, blocked_order_inte\n...[trimmed]...\nmit=3)\n\n    assert [feature.idea_id for feature in features] == [\"idea_9\", \"idea_10\", \"idea_11\"]\n    assert [feature.signal_date for feature in features] == [\"2026-01-10\", \"2026-01-11\", \"2026-01-12\"]\n\n\nclass FixtureMarketDataProvider:\n    def __init__(self) -> None:\n        self.benchmark_calls = 0\n        self.liquidity_calls = 0\n\n    def benchmark_return(self, feature: FeatureVector) -> BenchmarkReturn:\n        self.benchmark_calls += 1\n        return BenchmarkReturn(\"SPY\", feature.signal_date, 0.2, \"workflow_fixture\")\n\n    def liquidity_snapshot(self, feature: FeatureVector) -> LiquiditySnapshot:\n        self.liquidity_calls += 1\n        return LiquiditySnapshot(feature.ticker, 100_000_000.0, 1.0, 3.0, \"workflow_fixture\")\n\n    def universe_membership(self, feature: FeatureVector) -> UniverseMembership | None:\n        return UniverseMembership(feature.ticker, feature.signal_date, True, False, \"workflow_fixture\")\n\n\ndef _write_sqlite(path: Path) -> None:\n    conn = sqlite3.connect(path)\n    try:\n        conn.executescript(\n            \"\"\"\n            CREATE TABLE step2_research_ideas (\n                idea_id TEXT PRIMARY KEY,\n                generated_at TEXT NOT NULL,\n                case_id TEXT NOT NULL,\n                candidate_id TEXT NOT NULL,\n                ticker TEXT NOT NULL,\n                signal_date TEXT,\n                source_title TEXT,\n                evidence TEXT,\n                sentiment TEXT,\n                sentiment_confidence REAL,\n                catalyst_strength REAL,\n                recommendation TEXT,\n                quality_status TEXT,\n                risk_status TEXT,\n                order_created INTEGER NOT NULL,\n                entry_price REAL NOT NULL,\n                signal_json TEXT NOT NULL,\n                payload_json TEXT NOT NULL,\n                eval_stage TEXT NOT NULL\n            );\n            CREATE TABLE step2_forward_returns (\n                idea_id TEXT NOT NULL,\n                horizon_days INTEGER NOT NULL,\n                future_date TEXT NOT NULL,\n                gross_return_pct REAL NOT NULL,\n                net_return_pct REAL NOT NULL,\n                cost_bps REAL NOT NULL,\n                PRIMARY KEY (idea_id, horizon_days)\n            );\n            \"\"\"\n        )\n        for index in range(12):\n            idea_id = f\"idea_{index}\"\n            conn.execute(\n                \"\"\"\n                INSERT INTO step2_research_ideas VALUES (\n                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?\n                )\n                \"\"\",\n                (\n                    idea_id,\n                    \"2026-01-01T00:00:00Z\",\n                    f\"case_{index}\",\n                    f\"candidate_{index}\",\n                    \"AAPL\" if index % 2 == 0 else \"MSFT\",\n                    f\"2026-01-{index + 1:02d}\",\n                    \"Fixture\",\n                    \"Evidence\",\n                    \"positive\",\n                    0.8,\n                    0.8,\n                    \"buy\",\n                    \"pass\",\n                    \"pass\",\n                    1,\n                    100.0,\n        (\n            '{\"trend\": \"uptrend\", \"momentum_20d_pct\": 8, '\n            '\"mean_reversion_z_20d\": 0, \"volume_signal\": \"high_volume_confirmation\"}'\n        ),\n                    \"{}\",\n                    \"fixture\",\n                ),\n            )\n            conn.execute(\n                \"INSERT INTO step2_forward_returns VALUES (?, 10, ?, ?, ?, 45)\",\n                (idea_id, \"2026-02-01\", 1.0, 1.0),\n            )\n        conn.commit()\n    finally:\n        conn.close()\n\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_error\",\"message\":\"The 'gpt-5.5' model requires a newer version of Codex. Please upgrade to the latest app or CLI and try again.\"}}\n",
+      "provider": "codex",
+      "model": null,
+      "reasoningEffort": null,
+      "createdAt": "2026-06-11T18:18:16.444Z"
+    }
+  ],
+  "createdAt": "2026-06-11T18:14:29.296Z",
+  "updatedAt": "2026-06-11T18:18:16.444Z"
+}
